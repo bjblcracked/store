@@ -1,0 +1,10 @@
+navicat是一个比较流行的MySQL管理工具，在很多服务器上都可以找到
+
+有两个方法提权：
+
+1、从日志文件里找密码，navicat会把操作日志（比如加账户）保存到My DocumentsNavicatMySQLlogs下的LogHistory.txt，低版本是安装目录下的logs下LogHistory.txt
+
+2、navicat管理的MySQL服务器信息（一般是root帐户）是存在注册表里的，具体是HKEY_CURRENT_USERSoftwarePremiumSoftNavicatServers下，导出注册表导入到本机然后星号察看就OK了。。
+
+
+本文来自: 网络安全攻防研究室(www.91ri.org) 请尊重作者，转载时带上版权信息。 详细内容请参考：http://www.91ri.org/3318.html

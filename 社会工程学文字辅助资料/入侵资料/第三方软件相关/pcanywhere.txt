@@ -1,0 +1,5 @@
+第一   
+如果服务器上有装了pcanywhere服务端，管理员为了管理方便   
+也给了我们方便，到系统盘的Documents and Settings/All Us   
+ers/Application Data/Symantec/pcAnywhere/中下载*.cif本地   
+破解就使用pcanywhere连接就ok了   

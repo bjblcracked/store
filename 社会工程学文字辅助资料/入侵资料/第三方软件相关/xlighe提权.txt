@@ -1,0 +1,12 @@
+xlighe提权 先说这个软件的几个主要文件
+2ftpd.password   这个里面放的是用户的FTP帐号和密码 是MD5的
+2ftpd.users   用户名以及对应的目录
+2remote_admin.exe   负责远程管理的程序
+2xlight.exe   主程序
+如果想通过这个软件提权 必须是在管理开放了远程管理的条件下
+我发现如果开放了远程管理 那么会产生一个新的配置文件 ftpd.option 
+如果有的话 下载remote_serbvers.ini 然后替换本地的 remote_serbvers.ini 后进行远程管理提权
+也就是说它可以不使用这个FTP软件远程管理 只开放了 网站客户的FTP服务
+你可以在这个目录上传一个remote_serbvers.ini 和ftpd.option ···然后再提权
+
+很久以前提权时候遇到的 当时没有成功 但是本地测试得到以上结论

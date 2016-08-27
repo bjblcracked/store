@@ -1,0 +1,4 @@
+
+在CMD路径那里输入PR的路径C:\RECYCLER\pr.exe
+
+然后再命令那里把/c set都清除掉输入”net user 90sec 90sec /add”。

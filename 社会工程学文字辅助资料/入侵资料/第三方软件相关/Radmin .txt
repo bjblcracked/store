@@ -1,0 +1,7 @@
+ Radmin 默认端口是4899，先获取密码和端口，如下位置：
+
+    HKEY_LOCAL_MACHINE\SYSTEM\RAdmin\v2.0\Server\Parameters\Parameter //默认密码注册表位置
+
+    HKEY_LOCAL_MACHINE\SYSTEM\RAdmin\v2.0\Server\Parameters\Port //默认端口注册表位置
+
+    然后用HASH版连接。

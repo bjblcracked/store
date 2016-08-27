@@ -1,0 +1,6 @@
+\Windows\SysWOW64\inetsrv\>
+
+appcmd list site
+
+
+appcmd list config

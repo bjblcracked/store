@@ -1,0 +1,3 @@
+有次无意的入侵使我发现了ewebeditor2.7.0版本的存在注入漏洞
+简单利用就是
+http://site/path/ewebeditor/ewebeditor.asp?id=article_content&style=full_v200

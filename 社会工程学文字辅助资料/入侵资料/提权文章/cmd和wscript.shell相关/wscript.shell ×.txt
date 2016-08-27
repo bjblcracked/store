@@ -1,0 +1,22 @@
+
+wscript.shell × 命令行执行组件这是因为wscript.shell改名了，或者从注册表删除了删除方法：regsvr32/u C:\windows\System32\wshom.ocxregsvr32/u C:\windows\System32\shell32.dll恢复方法：regsvr32/u C:\windows\System32\wshom.ocxregsvr32/u C:\
+ 
+wscript.shell × 命令行执行组件
+这是因为wscript.shell改名了，或者从注册表删除了
+
+删除方法：
+regsvr32/u C:\windows\System32\wshom.ocx
+regsvr32/u C:\windows\System32\shell32.dll
+
+恢复方法：
+regsvr32/u C:\windows\System32\wshom.ocx
+regsvr32/u C:\windows\System32\shell32.dll
+
+这里利用serv-u执行恢复命令
+cmd /c regsvr32/u C:\windows\System32\wshom.ocx
+cmd /c regsvr32/u C:\windows\System32\shell32.dll
+
+恢复wscript.shell之后，本来不能读取的3389端口，变为可以读取了
+
+regsvr32/u C:\windows\System32\wshom.ocx
+regsvr32/u C:\windows\System32\shell32.dll

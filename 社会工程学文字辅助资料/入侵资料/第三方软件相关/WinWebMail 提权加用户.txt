@@ -1,0 +1,25 @@
+
+WinWebMail 提权加用户：
+
+    WinWebMail目录下的web必须设置everyone权限可读可写，在开始程序里，找到WinWebMail快捷方式，接下来，看路径，访问“路径\web”传 shell，访问shell后，权限是system，直接放远控进启动项，等待下次重启。
+
+    没有删cmd组件的可以直接加用户，7i24的web目录也是可写，权限为administrator。
+
+
+WinWebMail Server。
+
+隐约记得网上有关于winwebmail提权的传说，说这个程序的目录必须是everyone可写的。虽然不大相信，也暂且试一回吧。
+
+把winwebmail的快捷方式down下来，找到安装路径为D:\Server\Mail\WinWebMail\easymail.exe。
+
+跳转D:\Server，木权限，D:\Server\Mail\，进来鸟，嘿嘿，至少是可以读的。最后转到D:\Server\Mail\WinWebMail，
+
+试着传个文件，终于rp爆发了……
+
+原来网上的传说是真的！ok，打起精神，来替换服务吧……不好意思，很晚了，我要先睡觉了，明天继续……
+
+今天继续。网上去down了个winwebmail，装上查看服务启动的进程为emsvr.exe。ok，先把服务器上的emsvr.exe改个名字，
+
+然后上传个后门取名为emsvr.exe。呵呵，幸好没被杀，我对免杀可是一窍不通。没耐心等到晚上了，直接重启
+
+几分钟之后，服务器上线，

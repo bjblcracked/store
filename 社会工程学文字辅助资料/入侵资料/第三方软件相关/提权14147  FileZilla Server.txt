@@ -1,0 +1,71 @@
+继续翻一番，发现了mysql，版本5.1，提权必要要将udf导到mysql他的目录如：C:\Program Files\MySQL\MySQL Server 5.1\lib\plugin\，但是目录不可写，导不进去。。。 只好换了。 好吧，来看看注册表，翻到了FileZilla server，FileZilla提权，你懂得。 什么？你不懂。。。 好吧。
+
+===========================================================================
+
+以下引用shaoye的文档：
+
+ 
+
+
+首先呢 找到14147  FileZilla Server目录   找目录的问题别问我 注册表 开始程序你懂的
+
+ 
+
+然后呢 找到
+
+ 
+
+FileZilla+Server+Interface.xml这个文件存放了端口 密码等信息   
+
+ 
+
+<FileZillaServer>
+
+    <Settings>
+
+        <Item name="Last Server Address" type="string">127.0.0.1</Item> ip
+
+        <Item name="Last Server Port" type="numeric">14147</Item> 端口是14147
+
+        <Item name="Last Server Password" type="string" />   string是密码
+
+        <Item name="Always use last server" type="numeric">1</Item>
+
+        <Item name="Start Minimized" type="numeric">1</Item>
+
+        <Item name="User Sorting" type="numeric">0</Item>
+
+    </Settings>
+
+</FileZillaServer>
+
+ 
+
+ 
+
+FileZilla+Server.xml 这个存放着所有FTP用户的信息 账号密码目录等，32位md5加密（目标站md5没有破解才出来。）
+
+ 
+
+先转下端口 不然不能直接连接的
+
+ 
+
+然后本地安装FileZilla Server
+
+ 
+
+安装好了 打开软件 点击连接到服务器 ip输入127.0.0.1就可以了 因为我们刚才已经转发了端口 端口写什么 转发的端口 你懂的 密码写上面找到的密码 string
+
+ 
+
+然后连接进去后 点击 用户配置  然后点击添加用户 然后再点击共享目录 给他设置目录
+
+ 
+
+然后权限那些自己看着弄 提权全部勾上就可以了
+
+ 
+
+不能像serv-u一样直接执行命令来提权 所以可以替换一些系统文件呀 sethc替换呀 上传到启动项目录提权呀 之类的 你懂的。
+

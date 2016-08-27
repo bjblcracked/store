@@ -1,0 +1,16 @@
+http://milw0rm.com/papers/202
+http://milw0rm.com/papers/225
+http://ferruh.mavituna.com/sql-injection-cheatsheet-oku/
+http://www.wisec.it/en/Docs/and_more_sql_injection.pdf
+http://www.nextgenss.com/papers/advanced_sql_injection.pdf
+http://www.nextgenss.com/papers/more_advanced_sql_injection.pdf
+http://www.imperva.com/applicati ... rver_injection.html
+http://www.imperva.com/applicati ... atures_evasion.html
+http://www.spidynamics.com/whitepapers/Blind_SQLInjection.pdf
+http://www.spidynamics.com/whitepapers/WhitepaperSQLInjection.pdf
+http://www.appsecinc.com/present ... g_SQL_Injection.pdf
+http://www.securiteam.com/securityreviews/5DP0N1P76E.html
+http://www.wiretrip.net/rfp/txt/rfp2k01.txt
+http://www.sensepost.com/misc/SQLinsertion.htm
+http://www.airscanner.com/pubs/sql.pdf
+http://www.securityfocus.com/infocus/1768

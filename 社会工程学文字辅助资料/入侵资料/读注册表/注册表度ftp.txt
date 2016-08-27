@@ -1,0 +1,9 @@
+
+重要注册表：
+HKEY_LOCAL_MACHINE\SYSTEM\ControlSet002\Services\MSFtpsvc\Parameters\Virtual Roots\
+ControlSet002这个目录可以是ControlSet001 ControlSet003
+注明：不是用第三方软件分配出来的ftp用户，一定要是基于iis分配出来的用户。系统才会在这个目录生成ftp用户名以及用户路径。
+举例：1、可以利用ftp用户信息通过社工，或者猜解密码，来获取目标的ftp密码！
+本文来源于独自等待博客：http://www.waitalone.cn/ 原文地址：http://www.waitalone.cn/post/RegeditFTP.html 
+
+

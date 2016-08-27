@@ -1,0 +1,5 @@
+http://www.ruby-lang.org/zh_TW/中文
+
+http://www.ruby-lang.org/en/英文
+
+rb文件

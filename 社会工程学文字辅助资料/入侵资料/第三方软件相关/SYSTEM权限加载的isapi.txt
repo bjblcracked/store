@@ -1,0 +1,43 @@
+WIN2K+IIS5.0默认情况下应用程序保护选项是"中（共用的）"，这时IIS加载isapi是用的   
+iwam_computername用户身份执行。   
+但默认情况下WIN2K+IIS5对于一些特殊isapi又要以system身份加载。win2k+iis5 、   
+win2k+iis5+sp1、win2k+iis5+sp2都是简单的判断isapi的文件名，并且没有做目录限制，   
+以SYSTEM权限加载的isapi有：   
+1、 idq.dll   
+2、 httpext.dll   
+3、 httpodbc.dll   
+4、 ssinc.dll   
+5、 msw3prt.dll   
+6、 author.dll   
+7、 admin.dll   
+8、 shtml.dll   
+9、 sspifilt.dll   
+10、compfilt.dll   
+11、pwsdata.dll   
+12、md5filt.dll   
+13、fpexedll.dll  
+
+所以利用这很容易得到SYSTEM权限。并且判断文件名的时候有个bug，比如请求/scripts/test%81%5cssinc.dll也将会认为是请求的ssinc.dll,就是分离文件路径的时候没有考虑到双字节的 远东版问题。ssinc.dll在处理包含文件路径的时候也有一个问题，就是"/"、"\"只识别了一个 "/"，所以如果请求里面使用"\"，就会错误的处理包含文件路径，有可能泄露东西或者出现权限 漏洞，这种漏洞很多别的地方（ php、asp等）也还存在。  
+
+加载这些isapi不是单以文件名做依据了，而是加了路径，应该是修正了此问题。   
+一般默认情况下是：   
+1、 idq.dll d:\winnt\system32\idq.dll   
+2、 httpext.dll d:\winnt\system32\inetsrv\httpext.dll   
+3、 httpodbc.dll d:\winnt\system32\inetsrv\httpodbc.dll   
+4、 ssinc.dll d:\winnt\system32\inrtsrv\ssinc.dll   
+5、 msw3prt.dll d:\winnt\system32\msw3prt.dll   
+6、 author.dll D:\Program Files\Common Files\Microsoft Shared\web server extensions\40\isapi\_vti_aut\author.dll   
+7、 admin.dll D:\Program Files\Common Files\Microsoft Shared\web server extensions\40\isapi\_vti_adm\admin.dll   
+8、 shtml.dll D:\Program Files\Common Files\Microsoft Shared\web server extensions\40\isapi\shtml.dll   
+9、 sspifilt.dll d:\winnt\system32\inetsrv\sspifilt.dll   
+10、compfilt.dll d:\winnt\system32\inetsrv\compfilt.dll   
+11、pwsdata.dll d:\winnt\system32\inetsrv\pwsdata.dll   
+12、md5filt.dll d:\winnt\system32\inetsrv\md5filt.dll   
+13、fpexedll.dll D:\Program Files\Common Files\Microsoft Shared\web server extensions\40\bin\fpexedll.dll  
+
+正常情况下这些路径都guest不能写,但如果配置不好，这些路径iis user能够写了就一样可以提升权限了  
+
+可以把ISAPIHack.dll上传到IIS的可执行目录，文件名可叫ssinc.dll或者admin.dll等（上面列的13个文件名之一）。   
+然后等待IIS重启加载此dll，就可以获得权限了   
+****************************************************************************   
+

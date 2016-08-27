@@ -1,0 +1,25 @@
+show?id=236?key=  属于get注入 用手工  用工具 穿山甲 NBSI
+
+http://www.sctone.com.cn/sctone/News_search.asp?key=1&otype=title&Submit=Search
+
+存在注入 接着我们用工具进行注入 前提我们要取的get数据
+
+http://www.sctone.com.cn/sctone/News_search.asp?otype=title&Submit=Search&key=1
+
+http://www.sctone.com.cn/sctone/News_search.asp?key=1
+
+
+我们还需要填写一个关键字蓉举行
+
+           不变的属于 post注入  用工具 穿山甲 NBSI    
+
+
+post注入 首先要抓包 
+
+提交的地址
+
+http://www.cnaec.com.cn/Work/refer/Search/2.asp
+
+KeyWord=1  搜索的关键字放在后面 接着来拿出工具来搞
+
+http://www.cnaec.com.cn/Work/refer/Search/2.asp?KeyWord=1

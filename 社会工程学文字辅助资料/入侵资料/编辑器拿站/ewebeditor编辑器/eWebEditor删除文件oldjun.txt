@@ -1,0 +1,28 @@
+<HTML><HEAD><TITLE>eWebEditor删除文件 by:oldjun(http://www.oldjun.com)</TITLE>  
+<style>body,p,td,input {font-size:9pt}</style>  
+</HEAD><BODY><a href='list.asp'>新闻列表</a> | <a href='add.asp'>增加新闻</a>    
+<b>增加新闻</b>   
+<form action="http://127.0.0.1/editor/Example/NewsSystem/addsave.asp"    
+method="post" name="myform">  
+ <input type=hidden name=d_originalfilename>  
+  <input type=hidden name=d_savefilename>  
+ <table cellspacing=3 align=center>  
+<tr><td>要删的文件(相对路径就可以了)：</td>  
+<td><input type="text" name="d_savepathfilename" value="" size="90"></td>  
+</tr>  
+<tr><td>新闻标题(随便填)：</td>  
+<td><input type="text" name="d_title" value="" size="90"></td>  
+</tr>  
+<tr><td>标题图片：</td>  
+<td><select name="d_picture" size=1><option value=''>无</option></select>  
+当编辑区有插入图片时，将自动填充此下拉框</td>  
+</tr>  
+<tr><td>新闻内容(随便填)：</td>  
+<td><textarea name="d_content"></textarea></td>  
+</tr>  
+</table>  
+  
+<input type=submit name=btnSubmit value=" 提 交 ">    
+<input type=reset name=btnReset value=" 重 填 ">  
+</form>  
+30.</BODY></HTML>  

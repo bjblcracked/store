@@ -1,0 +1,7 @@
+开个cmd.exe窗口，输入：
+ntsd -c q -p PID
+
+最后那个PID为你要终止的进程的ID。
+
+
+kill <进程 PID 号>，

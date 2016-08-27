@@ -1,0 +1,28 @@
+8、for /d %i in (d:\freehost\*) do @echo %i
+
+列出d的所有目录
+  
+  for /d %i in (???) do @echo %i
+
+把当前路径下文件夹的名字只有1-3个字母的打出来
+
+2.for /r %i in (*.exe) do @echo %i
+  
+以当前目录为搜索路径.会把目录与下面的子目录的全部EXE文件列出
+
+for /r f:\freehost\hmadesign\web\ %i in (*.*) do @echo %i
+
+3.for /f %i in (c:\1.txt) do echo %i 
+  
+  //这个会显示a.txt里面的内容，因为/f的作用，会读出a.txt中
+
+4.for /f "tokens=2 delims= " %i in (a.txt) do echo %i
+
+  delims=后的空格是分隔符 tokens是取第几个位置
+
+
+列e:\wwwroot\hackand\web\目录
+/c for /d %i in (e:\wwwroot\hackand\web\*) do @echo %i
+
+列目录文件里面的内容
+/c type e:\wwwroot\hackand\web\data\sql_config.php

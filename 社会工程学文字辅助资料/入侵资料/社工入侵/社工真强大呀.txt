@@ -1,0 +1,5 @@
+2、社工真强大呀
+既然工具不能使用，那么我手工总可以吧？于是社工FTP，后台地址，Google搜索一起使用结果还是不行，测试wwwroot,rar, wwwroot,zip不行，于是测试网站域名XXXXX.zip不行，XXXXX.rar奇迹出现了，结果弹出下载提示框，天助我也，今天必灭之。打开迅雷，输入下载地址，下载源码。
+本文来源于独自等待博客：http://www.waitalone.cn/ 原文地址：http://www.waitalone.cn/post/617.html 
+
+

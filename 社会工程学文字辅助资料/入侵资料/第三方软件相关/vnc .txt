@@ -1,0 +1,3 @@
+首先利用 shell 读取 vnc 保存在注册表中的密文，然后再使用工具VNC4X破解。
+
+    注册表位置：HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\WinVNC4\password

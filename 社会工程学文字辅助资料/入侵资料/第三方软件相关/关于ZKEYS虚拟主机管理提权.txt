@@ -1,0 +1,33 @@
+ZKEYS 是一个国内比较常用的IDC虚拟主机系统  
+
+原名：AutoHost
+
+后改名：ZKEYS 虚拟管理系统
+支持.NET 的话  查找注册表 
+HKEY_LOCAL_MACHINE\SOFTWARE\ZKEYS
+默认会有 ZKEYS 路径
+找到路径后
+如果找不到 可以猜 一般都在根目录
+ZKEYS 管理系统对 目录的限制 一般都不怎么严谨
+所以这个时候你懂得。。。
+一般都在硬盘的根目录
+打开
+*\ZKEYS\Setup.ini
+[Mysql]                        （MYSQL设置） 
+root=aaa                       （管理员帐号）
+RootPass=123                   （管理员密码）
+[Mssql]                        （MSSQL设置） 
+DbPath=d:\MSSQL\Data           （MSQL数据库存放路径）
+SA=aaa                         （管理眼帐号）
+SaPass=123                     （管理员密码）
+
+Guid=127.0.0.1|XXXXXX           主机系统的 IP 授权 和 密码
+
+下面就是看出比较鸡肋了
+要记住mysql是在mysql_zkeys  MySqlUserBySH安全账户下运行的mysql_zkeys是属于guest组MySqlUserBySH属于users组
+而 mssql 就更悲剧了 安全配置很牛叉。。。
+不过值得庆贺的一点，国内的网管都喜欢通用密码，所以,一般拿到 root 密码 社到管理的账号 可以说屡试不爽。。。
+
+phpmyadmin 在 127.0.0.1:999 端口
+
+必要的时候可以尝试

