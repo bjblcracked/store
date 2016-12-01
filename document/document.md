@@ -7,7 +7,7 @@ Logo          : True
 
 1.首先分析登陆的请求：
 
-![screen](https://github.com/jianaosiding/store/blob/master/document/images/cut.PNG)
+![screen](https://github.com/jianaosiding/store/blob/master/document/images/screen.PNG)
 
 **其中黄色为账号与密码；**
 
@@ -114,7 +114,7 @@ with codecs.open("C:/Users/ricaito/Desktop/buran_edge.txt", 'w', 'gbk') as f:
 ```
 利用gephi绘图如下：
 
-![cut](https://github.com/jianaosiding/store/blob/master/document/images/screen.PNG)
+![cut](https://github.com/jianaosiding/store/blob/master/document/images/cut.PNG)
 
 人物关系；
 
