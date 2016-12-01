@@ -7,9 +7,8 @@ Logo          : True
 
 1.首先分析登陆的请求：
 
-![screen]
+[screen](./images/screens.PNG)
 
-[screen]: images/screen.PNG "screen" { width:auto; max-width:90% }
 **其中黄色为账号与密码；**
 
 2.利用python写代码构建post请求；
@@ -51,7 +50,8 @@ print(soup)
 
 #文本人物关系分析
 利用python，**对一个剧本的中的人物的关系的分析**，并用gephi工具进行绘图：
-``` javascript
+
+```
 import jieba
 import codecs
 import jieba.posseg as pesg
@@ -114,9 +114,7 @@ with codecs.open("C:/Users/ricaito/Desktop/buran_edge.txt", 'w', 'gbk') as f:
 ```
 利用gephi绘图如下：
 
-![cut]
-
-[cut]: images/cut.PNG "cut" { width:auto; max-width:90% }
+[cut](./images/cut.PNG)
 
 人物关系；
 
