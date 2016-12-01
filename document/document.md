@@ -15,7 +15,7 @@ Logo          : True
 2.利用python写代码构建post请求；
 
 code：
-``` javascript
+```
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -110,6 +110,7 @@ with codecs.open("C:/Users/ricaito/Desktop/buran_edge.txt", 'w', 'gbk') as f:
             if w > 3:
                 f.write(name + " " + v + " " + str(w) + "\r\n")
 }
+
 ```
 利用gephi绘图如下：
 
