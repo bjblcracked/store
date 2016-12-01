@@ -14,4 +14,4 @@
 
 [MySQl](./MySQl):为mysql的教程
 
-[Liunx](./liunx自学教程.pdf):为liunx自学教程
+[Linux](./linux自学教程.pdf):为liunx自学教程
