@@ -1,7 +1,5 @@
 # store
 
-##个人收藏，记录点滴
-
 [intromax_cn.pdf](./intromax_cn.pdf):为maxima的中文书籍
 
 [maxiam_zh.pdf](./maxima_zh.pdf):为maxima的中文书籍
